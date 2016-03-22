@@ -1,0 +1,38 @@
+<ion-view title="Search">
+    <ion-content overflow-scroll="true" padding="true" class="has-header">
+        <form class="list">
+            <h3>Start your search here</h3>
+            <label class="item item-input" name="search">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="search" placeholder="Building name, street or zip">
+            </label>
+            <label class="item item-select" name="houseType">
+                <span class="input-label">Type</span>
+                <select>
+                    <option>Apartment</option>
+                    <option>Independent House</option>
+                    <option>Row House</option>
+                    <option>Penthouse</option>
+                    <option>Studio Apartment</option>
+                </select>
+            </label>
+            <ion-item class="range range-positive">Budget
+                <input type="range" value="250" min="250" max="3000" name="budget">
+            </ion-item>
+            <label class="item item-select" name="bedrooms">
+                <span class="input-label">Bedrooms</span>
+                <select>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4+</option>
+                </select>
+            </label>
+            <label class="item item-input" name="moveIn">
+                <span class="input-label">Move-In</span>
+                <input type="date" placeholder="Enter date">
+            </label>
+            <button id="search-button11" class="button button-positive  button-block">Search</button>
+        </form>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,55 @@
+<ion-view title="List Your Property">
+    <ion-content overflow-scroll="true" padding="true" class="has-header">
+        <h3>Enter details</h3>
+        <form class="list">
+            <label class="item item-input">
+                <span class="input-label">Name</span>
+                <input type="text" placeholder="Building name">
+            </label>
+            <label class="item item-select" name="propertyType">
+                <span class="input-label">Property Type</span>
+                <select>
+                    <option>Apartment</option>
+                    <option>Independent House</option>
+                    <option>Row House</option>
+                    <option>Pent House</option>
+                    <option>Studio Apartment</option>
+                </select>
+            </label>
+            <label class="item item-select" name="rooms">
+                <span class="input-label">Rooms</span>
+                <select>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                </select>
+            </label>
+            <label class="item item-input" name="location">
+                <span class="input-label">Location</span>
+                <input type="text" placeholder="Select on map">
+            </label>
+            <ion-item class="item-divider">OR</ion-item>
+            <label class="item item-input">
+                <span class="input-label">Address</span>
+                <input type="text" placeholder="Enter Address">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Area</span>
+                <input type="number" placeholder="Area in Sq ft">
+            </label>
+            <label class="item item-input" name="possession">
+                <span class="input-label">Posession from</span>
+                <input type="date" placeholder="Enter date">
+            </label>
+            <label class="item item-input" name="rent">
+                <span class="input-label">Rent</span>
+                <input type="number" placeholder="Monthly Rent $">
+            </label>
+            <ion-toggle toggle-class="toggle-positive" name="furnished">Furnished</ion-toggle>
+            <button id="listYourProperty-button12" class="button button-positive  button-block">Continue</button>
+        </form>
+    </ion-content>
+</ion-view>
