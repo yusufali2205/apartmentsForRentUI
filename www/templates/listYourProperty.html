@@ -1,55 +1,56 @@
-<ion-view title="List Your Property">
+<ion-view title="List Your Property" ng-controller="listYourPropertyCtrl">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
         <h3>Enter details</h3>
-        <form class="list">
+        <form class="list" ng-submit="addProperty()">
             <label class="item item-input">
                 <span class="input-label">Name</span>
-                <input type="text" placeholder="Building name">
+                <input type="text" ng-model="form.propertyName" placeholder="Building name">
             </label>
             <label class="item item-select" name="propertyType">
                 <span class="input-label">Property Type</span>
-                <select>
-                    <option>Apartment</option>
-                    <option>Independent House</option>
-                    <option>Row House</option>
-                    <option>Pent House</option>
-                    <option>Studio Apartment</option>
+                <select ng-model="form.type">
+                    <option value="apt">Apartment</option>
+                    <option value="house">Independent House</option>
+                    <option value="row">Row House</option>
+                    <option value="pent">Pent House</option>
+                    <option value="studio">Studio Apartment</option>
                 </select>
             </label>
             <label class="item item-select" name="rooms">
                 <span class="input-label">Rooms</span>
-                <select>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
+                <select ng-model="form.bhk">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
                 </select>
             </label>
-            <label class="item item-input" name="location">
+            <label class="item item-input" name="location" ng-hide=true>
                 <span class="input-label">Location</span>
                 <input type="text" placeholder="Select on map">
             </label>
-            <ion-item class="item-divider">OR</ion-item>
+            <ion-item class="item-divider" ng-hide=true>OR</ion-item>
             <label class="item item-input">
                 <span class="input-label">Address</span>
-                <input type="text" placeholder="Enter Address">
+                <input type="text" ng-model="form.address" placeholder="Enter Address">
             </label>
             <label class="item item-input">
                 <span class="input-label">Area</span>
-                <input type="number" placeholder="Area in Sq ft">
+                <input type="number" ng-model="form.floorArea" placeholder="Area in Sq ft">
             </label>
             <label class="item item-input" name="possession">
                 <span class="input-label">Posession from</span>
-                <input type="date" placeholder="Enter date">
+                <input type="date" ng-model="form.availableFrom" placeholder="Enter date">
             </label>
             <label class="item item-input" name="rent">
                 <span class="input-label">Rent</span>
-                <input type="number" placeholder="Monthly Rent $">
+                <input type="number" ng-model="form.price" placeholder="Monthly Rent $">
             </label>
-            <ion-toggle toggle-class="toggle-positive" name="furnished">Furnished</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" ng-model="form.furnished" name="furnished">Furnished</ion-toggle>
             <button id="listYourProperty-button12" class="button button-positive  button-block">Continue</button>
         </form>
+      {{property}}
     </ion-content>
 </ion-view>

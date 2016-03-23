@@ -8,8 +8,39 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('listYourPropertyCtrl', function($scope) {
+.controller('listYourPropertyCtrl', function($scope, PropertyRepo) {
+  $scope.form = {
+    propertyName: "",
+    type: "",
+    bhk: "",
+    geoLat: "",
+    geoLong: "",
+    address: "",
+    floorArea: "",
+    availableFrom: "",
+    price: "",
+    furnished: "",
+    userId: "",
+    pictureLink: "",
+    approved: false,
+    postedOn: ""
+  };
 
+  $scope.addProperty = function() {
+    PropertyRepo.addProperty($scope.form.propertyName, $scope.form.type, $scope.form.bhk, 0, 0,
+      $scope.form.address, $scope.form.floorArea, $scope.form.availableFrom, $scope.form.price, $scope.form.furnished,
+      1, "")
+      .then(
+        function (responseData) {
+          console.log("-----Property Added-----");
+          $scope.property = responseData;
+        },
+        function (errorMessage) {
+          console.warn("-----Error-----");
+          console.warn(errorMessage);
+        }
+      )
+  }
 })
 
 .controller('loginCtrl', function($scope, UserRepo) {
