@@ -111,10 +111,30 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('addPicturesCtrl', function($scope) {
-
+.controller('addPicturesCtrl', function($scope, Camera) {
+  $scope.getPhoto = function() {
+    Camera.getPicture().then(function(imageURI) {
+      console.log(imageURI);
+    }, function(err) {
+      console.warn(err);
+    });
+  }
 })
 
-.controller('homeCtrl', function($scope) {
-
+.controller('homeCtrl', function($scope, PropertyRepo) {
+  $scope.propertyList = [];
+  $scope.getAllProperty = function() {
+    PropertyRepo.getAllProperty()
+      .then(
+        function(responseData){
+          console.log("-----Properties Fetched-----");
+          console.log(responseData);
+          $scope.propertyList = responseData._embedded.property;
+        },
+        function(errorMessage){
+          console.warn( "-----Error-----" );
+          console.warn( errorMessage );
+        }
+      )
+  }
 });

@@ -4,16 +4,16 @@
         <form class="list" ng-submit="addProperty()">
             <label class="item item-input">
                 <span class="input-label">Name</span>
-                <input type="text" ng-model="form.propertyName" placeholder="Building name">
+                <input type="text" ng-model="form.propertyName" placeholder="Building name" ng-required="required">
             </label>
             <label class="item item-select" name="propertyType">
                 <span class="input-label">Property Type</span>
                 <select ng-model="form.type">
-                    <option value="apt">Apartment</option>
-                    <option value="house">Independent House</option>
-                    <option value="row">Row House</option>
-                    <option value="pent">Pent House</option>
-                    <option value="studio">Studio Apartment</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Independent House">Independent House</option>
+                    <option value="Row House">Row House</option>
+                    <option value="Pent House">Pent House</option>
+                    <option value="Studio Apartment">Studio Apartment</option>
                 </select>
             </label>
             <label class="item item-select" name="rooms">

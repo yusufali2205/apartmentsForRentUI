@@ -1,11 +1,15 @@
-<ion-view title="Home">
+<ion-view title="Home" ng-controller="homeCtrl" ng-init="getAllProperty()">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <ion-list>
+      <ion-list ng-repeat="item in propertyList">
             <ion-item class="item-thumbnail-left">
                 <img>
-                <h2>Dynamic name</h2>
-                <p>With list of relevant result</p>
+                <h1>{{item.propertyName}}</h1>
+                <h2>{{item.type}}</h2>
+                <h2>{{item.price}}</h2>
+                <p>{{item.address}}</p>
+                <p>Posted on: {{item.postedOn}}</p>
             </ion-item>
+            <ion-item class="item-divider"></ion-item>
         </ion-list>
     </ion-content>
 </ion-view>
