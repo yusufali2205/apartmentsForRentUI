@@ -43,7 +43,8 @@ angular.module('app.routes', [])
   .state('menu', {
     url: '/side-menu21',
     templateUrl: 'templates/menu.html',
-    abstract:true
+    abstract:true,
+    controller: 'menuCtrl'
   })
 
   .state('menu.login', {
@@ -86,7 +87,27 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('addPictures', {
+    .state('menu.ownerDetails', {
+      url: '/owner/:ownerId',
+      views: {
+        'side-menu21': {
+          templateUrl: 'templates/owner.html',
+          controller: 'ownerCtrl'
+        }
+      }
+    })
+
+    .state('menu.propertyDetails', {
+      url: '/propertyDetails/:propertyLink',
+      views: {
+        'side-menu21': {
+          templateUrl: 'templates/propertyDetails.html',
+          controller: 'propertyDetailsCtrl'
+        }
+      }
+    })
+
+    .state('addPictures', {
     url: '/pictures',
     templateUrl: 'templates/addPictures.html',
     controller: 'addPicturesCtrl'
@@ -100,9 +121,9 @@ angular.module('app.routes', [])
         controller: 'homeCtrl'
       }
     }
-  })
+  });
 
-$urlRouterProvider.otherwise('/side-menu21/search')
+$urlRouterProvider.otherwise('/side-menu21/home')
 
 
 

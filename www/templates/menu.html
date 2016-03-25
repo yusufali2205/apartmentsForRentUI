@@ -1,4 +1,4 @@
-<ion-side-menus enable-menu-with-back-views="false">
+<ion-side-menus enable-menu-with-back-views="false" ng-controller="menuCtrl">
     <ion-side-menu-content>
         <ion-nav-bar class="bar-stable">
             <ion-nav-back-button></ion-nav-back-button>
@@ -16,20 +16,20 @@
             <ion-list>
                 <ion-item ui-sref="menu.home" menu-close="">Home</ion-item>
                 <ion-item ui-sref="menu.search" menu-close="">Search</ion-item>
-                <ion-item ui-sref="menu.shortlistedProperties" menu-close="">Shortlisted Properties</ion-item>
+                <ion-item ng-show="userLogged" ui-sref="menu.shortlistedProperties" menu-close="">Shortlisted Properties</ion-item>
             </ion-list>
             <div class="spacer" style="width: 268px; height: 24px;"></div>
             <ion-list>
-                <ion-item ui-sref="menu.login" menu-close="">Login</ion-item>
-            </ion-list>
-            <div class="spacer" style="width: 268px; height: 21px;"></div>
-            <ion-list>
-                <ion-item ui-sref="menu.listYourProperty" menu-close="">List Your Property</ion-item>
-                <ion-item ui-sref="menu.manageListings" menu-close="">Manage Listings</ion-item>
+                <ion-item ng-show="userLogged" ui-sref="menu.listYourProperty" menu-close="">List Your Property</ion-item>
+                <ion-item ng-show="userLogged" ui-sref="menu.manageListings" menu-close="">Manage Listings</ion-item>
             </ion-list>
             <div class="spacer" style="width: 268px; height: 24px;"></div>
             <ion-list>
-                <ion-item ui-sref="menu.settings" menu-close="">Settings</ion-item>
+                <ion-item ng-show="userLogged" ui-sref="menu.settings" menu-close="">Settings</ion-item>
+                <ion-item ng-show="userLogged" ng-click="logout()" menu-close="">Logout</ion-item>
+            </ion-list>
+            <ion-list>
+                <ion-item ng-hide="userLogged" ui-sref="menu.login" menu-close="">Login</ion-item>
             </ion-list>
         </ion-content>
     </ion-side-menu>

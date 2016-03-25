@@ -1,13 +1,18 @@
 <ion-view title="Home" ng-controller="homeCtrl" ng-init="getAllProperty()">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
-      <ion-list ng-repeat="item in propertyList">
+      <ion-refresher
+        pulling-text="Pull to refresh..."
+        on-refresh="getAllProperty()">
+      </ion-refresher>
+      <ion-list ng-repeat="property in propertyList">
             <ion-item class="item-thumbnail-left">
                 <img>
-                <h1>{{item.propertyName}}</h1>
-                <h2>{{item.type}}</h2>
-                <h2>{{item.price}}</h2>
-                <p>{{item.address}}</p>
-                <p>Posted on: {{item.postedOn}}</p>
+                <a ui-sref="menu.propertyDetails({propertyLink: property._links.self.href})"><h1>{{property.propertyName}}</h1></a>
+                <h2>{{property.type}}</h2>
+                <h2>{{property.price}}</h2>
+                <p>{{property.address}}</p>
+                <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Contact Owner</a>
+                <p>Posted on: {{property.postedOn}}</p>
             </ion-item>
             <ion-item class="item-divider"></ion-item>
         </ion-list>
