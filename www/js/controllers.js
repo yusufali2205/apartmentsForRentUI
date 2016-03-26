@@ -39,7 +39,8 @@ angular.module('app.controllers', [])
     PropertyRepo.verifyAddress($scope.form.address)
       .then(
         function(response){
-          if(response.status = "OK"){
+          console.log(response);
+          if(response.status = "OK" && response.results.length!=0){
             if(response.results.length<=1){
               $scope.form.address = response.results[0].formatted_address;
             } else {
@@ -47,7 +48,7 @@ angular.module('app.controllers', [])
             }
           } else if(response.status = "ZERO_RESULTS"){
             console.log("-----Invalid Address-----");
-            alert("Address could not be found. Please enter a valid address");
+            alert("Address not found. Please enter a valid address");
           } else {
             console.log("-----Trouble validating address-----");
             console.log(response);
@@ -131,7 +132,7 @@ angular.module('app.controllers', [])
   }
 })
 
-.controller('loginCtrl', function($scope, $location, $state, $rootScope, UserRepo) {
+.controller('loginCtrl', function($scope, $location, $state, $rootScope, $ionicHistory, UserRepo) {
   $scope.user = {
     firstName: "",
     lastName: "",
@@ -145,6 +146,9 @@ angular.module('app.controllers', [])
     UserRepo.login($scope.user.email, $scope.user.password)
       .then(
         function(responseData){
+          $ionicHistory.nextViewOptions({
+            disableBack: true
+          });
           $state.go('menu.home');
           console.log("-----Login success-----");
           console.log(responseData);
@@ -169,7 +173,7 @@ angular.module('app.controllers', [])
   }
 })
 
-.controller('signupCtrl', function($scope, $state, UserRepo) {
+.controller('signupCtrl', function($scope, $state, $ionicHistory, UserRepo) {
   $scope.form = {
     firstName: "",
     lastName: "",
@@ -190,6 +194,9 @@ angular.module('app.controllers', [])
       .then(
         function( responseData ) {
           /* Redirect to the home page */
+          $ionicHistory.nextViewOptions({
+            disableBack: true
+          });
           $state.go("menu.login");
           console.log("-----User added-----");
           console.log(responseData);

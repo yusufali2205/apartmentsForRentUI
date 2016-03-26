@@ -25,7 +25,12 @@ angular.module('app.routes', [])
     views: {
       'side-menu21': {
         templateUrl: 'templates/shortlistedProperties.html',
-        controller: 'shortlistedPropertiesCtrl'
+        controller: 'shortlistedPropertiesCtrl',
+        onEnter: function($rootScope) {
+          if (!$rootScope.userLogged) {
+            $state.go('menu.login');
+          }
+        }
       }
     }
   })
@@ -108,9 +113,9 @@ angular.module('app.routes', [])
     })
 
     .state('addPictures', {
-    url: '/pictures',
-    templateUrl: 'templates/addPictures.html',
-    controller: 'addPicturesCtrl'
+      url: '/pictures',
+      templateUrl: 'templates/addPictures.html',
+      controller: 'addPicturesCtrl'
   })
 
   .state('menu.home', {

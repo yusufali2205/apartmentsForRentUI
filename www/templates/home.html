@@ -9,7 +9,7 @@
                 <img>
                 <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><h1>{{property.propertyName}}</h1></a>
                 <h2>{{property.type}}</h2>
-                <h2>{{property.price}}</h2>
+                <h2>{{property.price | currency}}/month</h2>
                 <p>{{property.address}}</p>
                 <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Contact Owner</a>
                 <p>Posted on: {{property.postedOn}}</p>
