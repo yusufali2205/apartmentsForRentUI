@@ -1,0 +1,35 @@
+<ion-view title="Property Details" ng-controller="propertyDetailsCtrl" ng-init="getPropertyById()">
+  <ion-content overflow-scroll="true" padding="true" class="has-header">
+    <h2>Property Details</h2>
+    <h3>Property Details</h3>
+    {{propertySelected}}
+
+    <h3>Owner Details</h3>
+    {{owner}}
+
+    <h3>Average Rating</h3>
+    {{avgRating}}
+
+    <h3 ng-show="userLogged">Write a review</h3>
+    <form ng-show="userLogged" class="list" ng-submit="addReview()">
+      <label class="item item-select" name="giveRating">
+        <span class="input-label">Rating</span>
+        <select ng-model="reviewForm.rating" ng-required="required">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Review</span>
+        <input type="text" ng-model="reviewForm.review" placeholder="Your feedback...">
+      </label>
+      <button id="listYourProperty-button12" class="button button-positive  button-block">Submit</button>
+    </form>
+
+    <h3>Reviews</h3>
+    {{reviews}}
+  </ion-content>
+</ion-view>

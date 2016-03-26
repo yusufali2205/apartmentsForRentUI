@@ -33,20 +33,99 @@ angular.module('app.controllers', [])
     }, function(err) {
       console.warn(err);
     });
-  }
+  };
+
+  $scope.autoFetchAddress = function(){
+    PropertyRepo.verifyAddress($scope.form.address)
+      .then(
+        function(response){
+          if(response.status = "OK"){
+            if(response.results.length<=1){
+              $scope.form.address = response.results[0].formatted_address;
+            } else {
+              alert("Multiple addresses found. Please provide more specific address.")
+            }
+          } else if(response.status = "ZERO_RESULTS"){
+            console.log("-----Invalid Address-----");
+            alert("Address could not be found. Please enter a valid address");
+          } else {
+            console.log("-----Trouble validating address-----");
+            console.log(response);
+            alert("Problem in address validation: " + response.status + "\nTry more specific address.");
+          }
+        },
+        function(error){
+          console.log("-----Error in property verification-----");
+          console.log(error);
+        }
+      )
+  };
 
   $scope.addProperty = function() {
-    PropertyRepo.addProperty($scope.form.propertyName, $scope.form.type, $scope.form.bhk, 0, 0,
-      $scope.form.address, $scope.form.floorArea, $scope.form.availableFrom, $scope.form.price, $scope.form.furnished,
-      $rootScope.userLogged.userId, "")
+    /* First verify if the address is valid on google database */
+    PropertyRepo.verifyAddress($scope.form.address)
       .then(
-        function (responseData) {
-          console.log("-----Property Added-----");
-          $scope.property = responseData;
+        function(verifierResponse){
+          /* For a valid address response should be OK and results should be 1
+           * More than 1 results means we need more specific address.
+           */
+          if(verifierResponse.status = "OK" && verifierResponse.results.length<=1){
+            /* Check if address already present in database using place-id
+             * This is for not allowing users to post a property multiple times
+             */
+            console.log(verifierResponse);
+            PropertyRepo.checkPropertyByPlaceId(verifierResponse.results[0].place_id)
+              .then(
+                function(duplicateCheckerResponse){
+                  /* if property not present, go ahead with adding the property
+                   * 0 means not present, more than 1 means present
+                   */
+                  if(duplicateCheckerResponse<1){
+                    $scope.form.address = verifierResponse.results[0].formatted_address;
+                    var place_id = verifierResponse.results[0].place_id;
+                    var geo_lat = verifierResponse.results[0].geometry.location.lat;
+                    var geo_lng = verifierResponse.results[0].geometry.location.lng;
+                    console.log(place_id + " " + geo_lat + " " + geo_lng);
+                    /* Adding the property */
+                    PropertyRepo.addProperty($scope.form.propertyName, $scope.form.type, $scope.form.bhk, geo_lat, geo_lng,
+                      $scope.form.address, $scope.form.floorArea, $scope.form.availableFrom, $scope.form.price, $scope.form.furnished,
+                      $rootScope.userLogged.userId, "", place_id)
+                      .then(
+                        function (responseData) {
+                          console.log("-----Property Added-----");
+                          $scope.property = responseData;
+                        },
+                        function (errorMessage) {
+                          console.warn("-----Error while adding property-----");
+                          console.warn(errorMessage);
+                        }
+                      )
+                  }
+                  /* if property is present, give error address already listed */
+                  else {
+                    console.log("-----Address already present in database-----");
+                    alert("This address is already listed. Please try another address.");
+                  }
+                },
+                function(duplicateCheckerError){
+                  console.log("-----Error checking address for duplicates-----");
+                  console.log(duplicateCheckerError);
+                }
+              )
+
+          } else if(verifierResponse.status = "ZERO_RESULTS"){
+                console.log("-----Invalid Address-----");
+                alert("Address could not be found. Please enter a valid address");
+          } else {
+            console.log("-----Trouble validating address-----");
+            console.log(verifierResponse);
+            alert("Problem in address validation: " + verifierResponse.status + "\nTry more specific address.");
+          }
+
         },
-        function (errorMessage) {
-          console.warn("-----Error-----");
-          console.warn(errorMessage);
+        function(verifierError){
+          console.log("-----Error in property verification-----");
+          console.log(verifierError);
         }
       )
   }
@@ -181,8 +260,9 @@ angular.module('app.controllers', [])
   })
 
   .controller('propertyDetailsCtrl', function($scope, $stateParams, $rootScope, PropertyRepo, UserRepo) {
-    var propertyLink = $stateParams.propertyLink;
-    $scope.propertyId = "";
+    var propertyId = $stateParams.propertyId;
+    console.log(propertyId);
+    $scope.propertyId = propertyId;
     $scope.propertySelected = {};
     $scope.owner = {};
     $scope.avgRating = "";
@@ -196,17 +276,16 @@ angular.module('app.controllers', [])
       review: ""
     }
 
-    $scope.getPropertyByLink = function() {
-      $scope.propertySelected = $stateParams.propertyObj;
+    $scope.getPropertyById = function() {
 
-      PropertyRepo.getPropertyByLink(propertyLink)
+      PropertyRepo.getPropertyById(propertyId)
         .then(
           function(responseData){
             console.log("-----Property Details Fetched-----");
             console.log(responseData);
             $scope.propertySelected = responseData;
             $scope.getOwnerDetails();
-            $scope.getAllReviewsByPropertyLink();
+            $scope.getAllReviewsByPropertyId();
           },
           function(errorMessage){
             console.warn( "-----Error-----" );
@@ -247,15 +326,17 @@ angular.module('app.controllers', [])
         )
     };
 
-    $scope.getAllReviewsByPropertyLink = function() {
-      PropertyRepo.getAllReviewsByPropertyLink(propertyLink)
+    $scope.getAllReviewsByPropertyId = function() {
+      PropertyRepo.getAllReviewsByPropertyId(propertyId)
         .then(
           function(responseData){
             console.log("-----Reviews Fetched-----");
             console.log(responseData);
-            $scope.reviews = responseData._embedded.review;
-            $scope.propertyId = responseData._embedded.review[0].propertyId;
-            $scope.getAverageRating();
+            if(responseData._embedded.review.length>0){
+              $scope.reviews = responseData._embedded.review;
+              $scope.getAverageRating();
+            }
+
           },
           function(errorMessage) {
             console.warn("-----Error-----");

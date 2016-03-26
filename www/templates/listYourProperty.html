@@ -1,14 +1,14 @@
 <ion-view title="List Your Property" ng-controller="listYourPropertyCtrl">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
         <h3>Enter details</h3>
-        <form class="list" ng-submit="addProperty()">
-            <label class="item item-input">
-                <span class="input-label">Name</span>
-                <input type="text" ng-model="form.propertyName" placeholder="Building name" ng-required="required">
+        <form class="list" name="propertyForm" ng-submit="addProperty()">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Building Name</span>
+                <input type="text" ng-model="form.propertyName" placeholder="Building name">
             </label>
             <label class="item item-select" name="propertyType">
                 <span class="input-label">Property Type</span>
-                <select ng-model="form.type">
+                <select ng-model="form.type" required>
                     <option value="Apartment">Apartment</option>
                     <option value="Independent House">Independent House</option>
                     <option value="Row House">Row House</option>
@@ -16,7 +16,7 @@
                     <option value="Studio Apartment">Studio Apartment</option>
                 </select>
             </label>
-            <label class="item item-select" name="rooms">
+            <label class="item item-select" name="rooms" required>
                 <span class="input-label">Rooms</span>
                 <select ng-model="form.bhk">
                     <option value="1">1</option>
@@ -27,33 +27,35 @@
                     <option value="6">6</option>
                 </select>
             </label>
-            <label class="item item-input" name="location" ng-hide=true>
+            <label class="item item-input item-stacked-label" name="location" ng-hide=true>
                 <span class="input-label">Location</span>
                 <input type="text" placeholder="Select on map">
             </label>
             <ion-item class="item-divider" ng-hide=true>OR</ion-item>
-            <label class="item item-input">
+            <label class="item item-input item-stacked-label">
                 <span class="input-label">Address</span>
-                <input type="text" ng-model="form.address" placeholder="Enter Address">
+                <input type="text" ng-model="form.address" placeholder="Street, Apartment#, Locality, City, Zip"
+                       ng-blur="autoFetchAddress()" required>
             </label>
-            <label class="item item-input">
+            <label class="item item-input item-stacked-label">
                 <span class="input-label">Area</span>
                 <input type="number" ng-model="form.floorArea" placeholder="Area in Sq ft">
             </label>
-            <label class="item item-input" name="possession">
+            <label class="item item-input item-stacked-label" name="possession">
                 <span class="input-label">Posession from</span>
-                <input type="date" ng-model="form.availableFrom" placeholder="Enter date">
+                <input type="date" ng-model="form.availableFrom" placeholder="Enter date" required>
             </label>
-            <label class="item item-input" name="rent">
+            <label class="item item-input item-stacked-label" name="rent">
                 <span class="input-label">Rent</span>
-                <input type="number" ng-model="form.price" placeholder="Monthly Rent $">
+                <input type="number" ng-model="form.price" placeholder="Monthly Rent $" required>
             </label>
             <ion-toggle toggle-class="toggle-positive" ng-model="form.furnished" name="furnished">Furnished</ion-toggle>
-            <label class="item item-input" name="photo">
+            <label class="item item-input item-stacked-label" name="photo">
               <span class="input-label">Add Photo</span>
               <button class="button button-icon icon ion-camera" ng-click="getPhoto()">Take Photo</button>
             </label>
-            <button id="listYourProperty-button12" class="button button-positive  button-block">Continue</button>
+            <button id="listYourProperty-button12" class="button button-positive button-block"
+                    ng-disabled="propertyForm.$invalid">Continue</button>
         </form>
       {{property}}
     </ion-content>

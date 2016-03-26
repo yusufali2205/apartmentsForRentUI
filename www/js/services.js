@@ -1,8 +1,10 @@
 angular.module('app.services', [])
 
 .constant("myConfig", {
-  "url": "http://10.132.30.137",
-  "port": "8080"
+  "url": "http://10.132.24.123",
+  "port": "8080",
+  "googleGeocodeURL": "https://maps.googleapis.com/maps/api/geocode/json",
+  "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw"
 })
 
 .factory('Camera', ['$q', function($q) {
@@ -80,7 +82,7 @@ angular.module('app.services', [])
       method: "post",
       url: LOGOUT_URL,
       params: {
-        action: '/logout',
+        action: '/logout'
       }
     });
     return( request.then(
@@ -155,21 +157,25 @@ angular.module('app.services', [])
   .service('PropertyRepo', ['myConfig', '$http', '$q', function(myConfig, $http, $q){
     var PROPERTY_URL = myConfig.url + ":" + myConfig.port + "/property";
     var REVIEW_URL = myConfig.url + ":" + myConfig.port + "/review";
+    var ADDRESS_VERIFY_URL = myConfig.googleGeocodeURL;
 
     return({
       addProperty: addProperty,
       getAllProperty: getAllProperty,
       removeProperty: removeProperty,
       getAverageRating: getAverageRating,
-      getAllReviewsByPropertyLink: getAllReviewsByPropertyLink,
-      getPropertyByLink: getPropertyByLink,
+      getAllReviewsByPropertyId: getAllReviewsByPropertyId,
+      getPropertyById: getPropertyById,
       getOwnerByLink: getOwnerByLink,
-      addReview: addReview
+      addReview: addReview,
+      verifyAddress: verifyAddress,
+      checkPropertyByPlaceId: checkPropertyByPlaceId
     });
 
     function addProperty(propertyName, propertyType, bhk, geoLat, geoLong , address,
                          floorArea, availableFrom, propertyPrice, furnished,
-                         userId, pictureLink) {
+                         userId, pictureLink, placeId) {
+      console.log("Service: "+placeId + " " + geoLat + " " + geoLong);
       var utc = new Date().toJSON().slice(0,10);
       var request = $http({
         method: "post",
@@ -191,7 +197,8 @@ angular.module('app.services', [])
           userId: userId,
           pictureLink: pictureLink,
           approved: false,
-          postedOn: utc
+          postedOn: utc,
+          placeId: placeId
         }
       });
       return( request.then( handleSuccess, handleError ) );
@@ -231,21 +238,21 @@ angular.module('app.services', [])
       return( request.then( handleSuccess, handleError ) );
     }
 
-    function getAllReviewsByPropertyLink( propertyLink ) {
+    function getAllReviewsByPropertyId( propertyId ) {
       var request = $http({
         method: "get",
-        url: propertyLink + "/reviewsList",
+        url: PROPERTY_URL + "/" + propertyId + "/reviewsList",
         params: {
-          action: "get",
+          action: "get"
         }
       });
       return( request.then( handleSuccess, handleError ) );
     }
 
-    function getPropertyByLink( propertyLink ) {
+    function getPropertyById( propertyId ) {
       var request = $http({
         method: "get",
-        url: propertyLink,
+        url: PROPERTY_URL + "/" + propertyId,
         params: {
           action: "get"
         }
@@ -264,12 +271,13 @@ angular.module('app.services', [])
       return( request.then( handleSuccess, handleError ) );
     }
 
-    function getPropertyIdByLink( propertyLink ) {
+    function checkPropertyByPlaceId( placeId ) {
       var request = $http({
         method: "get",
-        url: propertyLink + "/postedByUser",
+        url: PROPERTY_URL + "/search/checkPropertyByPlaceId/",
         params: {
-          action: "get"
+          action: "get",
+          placeId: placeId
         }
       });
       return( request.then( handleSuccess, handleError ) );
@@ -288,6 +296,18 @@ angular.module('app.services', [])
           userId: userId,
           rating: rating,
           review: review
+        }
+      });
+      return( request.then( handleSuccess, handleError ) );
+    }
+
+    function verifyAddress(address) {
+      var request = $http({
+        method: "get",
+        url: ADDRESS_VERIFY_URL,
+        params: {
+          address: address,
+          key: myConfig.googleApiKey
         }
       });
       return( request.then( handleSuccess, handleError ) );

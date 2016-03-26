@@ -7,7 +7,7 @@
       <ion-list ng-repeat="property in propertyList">
             <ion-item class="item-thumbnail-left">
                 <img>
-                <a ui-sref="menu.propertyDetails({propertyLink: property._links.self.href})"><h1>{{property.propertyName}}</h1></a>
+                <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><h1>{{property.propertyName}}</h1></a>
                 <h2>{{property.type}}</h2>
                 <h2>{{property.price}}</h2>
                 <p>{{property.address}}</p>

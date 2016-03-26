@@ -98,7 +98,7 @@ angular.module('app.routes', [])
     })
 
     .state('menu.propertyDetails', {
-      url: '/propertyDetails/:propertyLink',
+      url: '/propertyDetails/:propertyId',
       views: {
         'side-menu21': {
           templateUrl: 'templates/propertyDetails.html',

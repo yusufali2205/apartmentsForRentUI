@@ -1,20 +1,20 @@
 <ion-view title="Login" ng-controller="loginCtrl">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <form class="list" ng-submit="login()">
+        <form class="list" name="loginForm" ng-submit="login()">
             <ion-list>
-                <label class="item item-input">
+                <label class="item item-input item-stacked-label">
                     <span class="input-label">Username</span>
-                    <input type="text" ng-model="user.email" placeholder="">
+                    <input type="text" ng-model="user.email" placeholder="example@example.com" required>
                 </label>
-                <label class="item item-input">
+                <label class="item item-input item-stacked-label" >
                     <span class="input-label">Password</span>
-                    <input type="password" ng-model="user.password" placeholder="">
+                    <input type="password" ng-model="user.password" placeholder="" required>
                 </label>
             </ion-list>
             <div class="spacer" style="height: 40px;"></div>
-            <button id="login-button1" class="button button-stable  button-block">Log in</button>
-            <a href="#" ui-sref="menu.signup" id="login-button2" class="button   button-block button-clear">Or create an account</a>
+            <button id="login-button1" class="button button-positive button-block" ng-disabled="loginForm.$invalid">Log in</button>
+            <a href="#" ui-sref="menu.signup" id="login-button2" class="button button-assertive button-block">Or create an account</a>
+
         </form>
-      {{user}}
     </ion-content>
 </ion-view>
