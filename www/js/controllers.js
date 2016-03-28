@@ -8,7 +8,7 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('listYourPropertyCtrl', function($scope, $rootScope, PropertyRepo, Camera) {
+.controller('listYourPropertyCtrl', function($scope, $rootScope, $ionicPopup, PropertyRepo, Camera) {
   $scope.form = {
     propertyName: "",
     type: "",
@@ -40,19 +40,29 @@ angular.module('app.controllers', [])
       .then(
         function(response){
           console.log(response);
-          if(response.status = "OK" && response.results.length!=0){
+          if(response.status = "OK" && response.results.length!=0 && $scope.form.address!=null){
             if(response.results.length<=1){
               $scope.form.address = response.results[0].formatted_address;
             } else {
-              alert("Multiple addresses found. Please provide more specific address.")
+              $ionicPopup.alert({
+                title: 'Multiple addresses found',
+                template: 'Please provide more specific address.'
+              });
             }
           } else if(response.status = "ZERO_RESULTS"){
             console.log("-----Invalid Address-----");
-            alert("Address not found. Please enter a valid address");
+            $ionicPopup.alert({
+              title: 'Address not found',
+              template: 'Please enter a valid address\nTo avoid spam listings we verify if this address exists ' +
+                        'and our system could not find this address.'
+            });
           } else {
             console.log("-----Trouble validating address-----");
             console.log(response);
-            alert("Problem in address validation: " + response.status + "\nTry more specific address.");
+            $ionicPopup.alert({
+              title: 'Problem in address validation',
+              template: response.status + "\nTry more specific address."
+            });
           }
         },
         function(error){
@@ -105,7 +115,10 @@ angular.module('app.controllers', [])
                   /* if property is present, give error address already listed */
                   else {
                     console.log("-----Address already present in database-----");
-                    alert("This address is already listed. Please try another address.");
+                    $ionicPopup.alert({
+                      title: 'Property already listed',
+                      template: "This address is already listed. Please try another address."
+                    });
                   }
                 },
                 function(duplicateCheckerError){
@@ -116,11 +129,17 @@ angular.module('app.controllers', [])
 
           } else if(verifierResponse.status = "ZERO_RESULTS"){
                 console.log("-----Invalid Address-----");
-                alert("Address could not be found. Please enter a valid address");
+                $ionicPopup.alert({
+                  title: 'Address not found',
+                  template: "Please enter a valid address."
+                });
           } else {
             console.log("-----Trouble validating address-----");
             console.log(verifierResponse);
-            alert("Problem in address validation: " + verifierResponse.status + "\nTry more specific address.");
+            $ionicPopup.alert({
+              title: 'Problem in address validation',
+              template: verifierResponse.status + "\nTry more specific address."
+            });
           }
 
         },
@@ -275,13 +294,15 @@ angular.module('app.controllers', [])
     $scope.avgRating = "";
     $scope.reviews = [];
     $scope.reviewCount = "";
+    $scope.navigateURL = "";
+    $scope.mapImageURL = "";
 
     $scope.reviewForm ={
       userId: "",
       propertyId: "",
       rating: "",
       review: ""
-    }
+    };
 
     $scope.getPropertyById = function() {
 
@@ -291,6 +312,10 @@ angular.module('app.controllers', [])
             console.log("-----Property Details Fetched-----");
             console.log(responseData);
             $scope.propertySelected = responseData;
+            $scope.mapImageURL = "https://maps.googleapis.com/maps/api/staticmap?center=" + responseData.geoLat
+              + "," + responseData.geoLong + "zoom=15&size=100x100&markers=color:red%7C" + responseData.geoLat + ","
+              + responseData.geoLong;
+            $scope.navigateURL = "http://maps.google.com/?q=" + responseData.geoLat + "," + responseData.geoLong;
             $scope.getOwnerDetails();
             $scope.getAllReviewsByPropertyId();
           },
