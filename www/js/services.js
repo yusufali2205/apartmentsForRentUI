@@ -1,7 +1,7 @@
 angular.module('app.services', [])
 
 .constant("myConfig", {
-  "url": "http://10.132.24.123",
+  "url": "http://10.132.27.80",
   "port": "8080",
   "googleGeocodeURL": "https://maps.googleapis.com/maps/api/geocode/json",
   "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw"
@@ -169,7 +169,9 @@ angular.module('app.services', [])
       getOwnerByLink: getOwnerByLink,
       addReview: addReview,
       verifyAddress: verifyAddress,
-      checkPropertyByPlaceId: checkPropertyByPlaceId
+      checkPropertyByPlaceId: checkPropertyByPlaceId,
+      getPropertyFiltered: getPropertyFiltered,
+      getPropertyPageByLink: getPropertyPageByLink
     });
 
     function addProperty(propertyName, propertyType, bhk, geoLat, geoLong , address,
@@ -208,6 +210,24 @@ angular.module('app.services', [])
       var request = $http({
         method: "get",
         url: PROPERTY_URL
+      });
+      return( request.then( handleSuccess, handleError ) );
+    }
+
+    function getPropertyFiltered(priceMin, priceMax, availableFrom, type, bhk, propertyName, address){
+      var request = $http({
+        method: "get",
+        url: PROPERTY_URL + "/search/findByPriceBetweenAndAvailableFromGreaterThanEqualAndTypeAndBhkAndPropertyNameIgnoreCaseOrAddressIgnoreCase",
+        params: {
+          action: "get",
+          priceMin: priceMin,
+          priceMax: priceMax,
+          availableFrom: availableFrom,
+          type: type,
+          bhk: bhk,
+          propertyName: propertyName,
+          address: address
+        }
       });
       return( request.then( handleSuccess, handleError ) );
     }
@@ -309,6 +329,14 @@ angular.module('app.services', [])
           address: address,
           key: myConfig.googleApiKey
         }
+      });
+      return( request.then( handleSuccess, handleError ) );
+    }
+
+    function getPropertyPageByLink(link) {
+      var request = $http({
+        method: "get",
+        url: link
       });
       return( request.then( handleSuccess, handleError ) );
     }

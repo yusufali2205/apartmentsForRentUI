@@ -16,5 +16,9 @@
             </ion-item>
             <ion-item class="item-divider"></ion-item>
         </ion-list>
+      <a ng-show="links.firstPage" href="#" onclick="loadPageWithLink(links.firstPage)">First</a>
+      <a ng-show="links.previousPage" href="#" onclick="loadPageWithLink(links.previousPage)">Previous</a>
+      <a ng-show="links.nextPage" href="#" onclick="loadPageWithLink(links.nextPage)">Next</a>
+      <a ng-show="links.lastPage" href="#" onclick="loadPageWithLink(links.lastPage)">Last</a>
     </ion-content>
 </ion-view>

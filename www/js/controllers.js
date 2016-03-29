@@ -1,7 +1,61 @@
 angular.module('app.controllers', [])
 
-.controller('searchCtrl', function($scope) {
+.controller('searchCtrl', function($scope, PropertyRepo) {
+  var utc = new Date();
+  $scope.propertyList = [];
+  $scope.links = {
+    previousPage: null,
+    nextPage: null,
+    firstPage: null,
+    lastPage: null
+  };
+  $scope.criteria = {
+    priceMin: 0,
+    priceMax: 5000,
+    availableFrom: '2016-01-01',
+    type: 'Apartment',
+    bhk: '1',
+    propertyName: ''
+  };
 
+  $scope.getFilteredProperty = function() {
+    PropertyRepo.getPropertyFiltered($scope.criteria.priceMin, $scope.criteria.priceMax, $scope.criteria.availableFrom,
+      $scope.criteria.type, $scope.criteria.bhk, $scope.criteria.propertyName, $scope.criteria.propertyName)
+      .then(
+        function(responseData){
+          console.log("-----Properties Fetched-----");
+          console.log(responseData);
+          $scope.propertyList = responseData._embedded.property;
+          if(responseData._links.prev) $scope.links.previousPage = responseData._links.prev.href;
+          if(responseData._links.next) $scope.links.nextPage = responseData._links.next.href;
+          if(responseData._links.first) $scope.links.firstPage = responseData._links.first.href;
+          if(responseData._links.last) $scope.links.lastPage = responseData._links.last.href;
+        },
+        function(errorMessage){
+          console.warn( "-----Error-----" );
+          console.warn( errorMessage );
+        }
+      )
+  };
+
+  $scope.loadPageWithLink = function(link) {
+    PropertyRepo.getPropertyPageByLink(link)
+      .then(
+        function(responseData){
+          console.log("-----Properties Fetched-----");
+          console.log(responseData);
+          $scope.propertyList = responseData._embedded.property;
+          if(responseData._links.prev) $scope.links.previousPage = responseData._links.prev.href;
+          if(responseData._links.next) $scope.links.nextPage = responseData._links.next.href;
+          if(responseData._links.first) $scope.links.firstPage = responseData._links.first.href;
+          if(responseData._links.last) $scope.links.lastPage = responseData._links.last.href;
+        },
+        function(errorMessage){
+          console.warn( "-----Error-----" );
+          console.warn( errorMessage );
+        }
+      )
+  }
 })
 
 .controller('shortlistedPropertiesCtrl', function($scope) {
@@ -313,7 +367,7 @@ angular.module('app.controllers', [])
             console.log(responseData);
             $scope.propertySelected = responseData;
             $scope.mapImageURL = "https://maps.googleapis.com/maps/api/staticmap?center=" + responseData.geoLat
-              + "," + responseData.geoLong + "zoom=15&size=100x100&markers=color:red%7C" + responseData.geoLat + ","
+              + "," + responseData.geoLong + "zoom=14&size=100x100&markers=color:red%7C" + responseData.geoLat + ","
               + responseData.geoLong;
             $scope.navigateURL = "http://maps.google.com/?q=" + responseData.geoLat + "," + responseData.geoLong;
             $scope.getOwnerDetails();
@@ -397,6 +451,13 @@ angular.module('app.controllers', [])
 
 .controller('homeCtrl', function($scope, PropertyRepo) {
   $scope.propertyList = [];
+  $scope.links = {
+    previousPage: null,
+    nextPage: null,
+    firstPage: null,
+    lastPage: null
+  };
+
   $scope.getAllProperty = function() {
     PropertyRepo.getAllProperty()
       .then(
@@ -404,6 +465,10 @@ angular.module('app.controllers', [])
           console.log("-----Properties Fetched-----");
           console.log(responseData);
           $scope.propertyList = responseData._embedded.property;
+          if(responseData._links.prev) $scope.links.previousPage = responseData._links.prev.href;
+          if(responseData._links.next) $scope.links.nextPage = responseData._links.next.href;
+          if(responseData._links.first) $scope.links.firstPage = responseData._links.first.href;
+          if(responseData._links.last) $scope.links.lastPage = responseData._links.last.href;
         },
         function(errorMessage){
           console.warn( "-----Error-----" );
@@ -414,5 +479,26 @@ angular.module('app.controllers', [])
         // Stop the ion-refresher from spinning
         $scope.$broadcast('scroll.refreshComplete');
       })
+  };
+
+
+  $scope.loadPageWithLink = function(link) {
+    PropertyRepo.getPropertyPageByLink(link)
+      .then(
+        function(responseData){
+          console.log("-----Properties Fetched-----");
+          console.log(responseData);
+          $scope.propertyList = responseData._embedded.property;
+          if(responseData._links.prev) $scope.links.previousPage = responseData._links.prev.href;
+          if(responseData._links.next) $scope.links.nextPage = responseData._links.next.href;
+          if(responseData._links.first) $scope.links.firstPage = responseData._links.first.href;
+          if(responseData._links.last) $scope.links.lastPage = responseData._links.last.href;
+        },
+        function(errorMessage){
+          console.warn( "-----Error-----" );
+          console.warn( errorMessage );
+        }
+      )
   }
+
 });
