@@ -73,6 +73,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.manageListings', {
+    cache: false,
     url: '/manageListings',
     views: {
       'side-menu21': {
@@ -82,7 +83,18 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('menu.editPropertyDetails', {
+    url: '/editPropertyDetails/:propertyId',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/editPropertyDetails.html',
+        controller: 'editPropertyDetailsCtrl'
+      }
+    }
+  })
+
   .state('menu.settings', {
+    cache: false,
     url: '/settings',
     views: {
       'side-menu21': {

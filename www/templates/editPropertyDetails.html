@@ -1,0 +1,75 @@
+<ion-view title="Edit Property" ng-controller="editPropertyDetailsCtrl" ng-init="getPropertyById()">
+    <ion-content overflow-scroll="true" padding="true" class="has-header">
+        <h3>Edit property details</h3>
+        <div ng-show="!editMode">
+            <p>Name: {{propertySelected.propertyName}}</p>
+            <p>Type: {{propertySelected.type}}</p>
+            <p>Rooms: {{propertySelected.bhk}}</p>
+            <p>Address: {{propertySelected.address}}</p>
+            <p>Floor area: {{propertySelected.floorArea}}</p>
+            <p>Possession from: {{propertySelected.availableFrom}}</p>
+            <p>Rent: {{propertySelected.price}}</p>
+            <p>Furnished: {{propertySelected.furnished}}</p>
+        </div>
+
+        <form ng-show="editMode" class="list" name="propertyForm" ng-submit="onUpdate()">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Building Name</span>
+                <input type="text" ng-model="form.propertyName" placeholder="Building name">
+            </label>
+            <label class="item item-select" name="propertyType">
+                <span class="input-label">Property Type</span>
+                <select ng-model="form.type" required>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Independent House">Independent House</option>
+                    <option value="Row House">Row House</option>
+                    <option value="Pent House">Pent House</option>
+                    <option value="Studio Apartment">Studio Apartment</option>
+                </select>
+            </label>
+            <label class="item item-select" name="rooms" required>
+                <span class="input-label">Rooms</span>
+                <select ng-model="form.bhk">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Address</span>
+                <p>{{propertySelected.address}}</p>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Area</span>
+                <input type="number" ng-model="form.floorArea" placeholder="Area in Sq ft">
+            </label>
+            <label class="item item-input item-stacked-label" name="possession">
+                <span class="input-label">Posession from</span>
+                <input type="date" ng-model="form.availableFrom" placeholder="Enter date" required>
+            </label>
+            <label class="item item-input item-stacked-label" name="rent">
+                <span class="input-label">Rent</span>
+                <input type="number" ng-model="form.price" placeholder="Monthly Rent $" required>
+            </label>
+            <ion-toggle toggle-class="toggle-positive" ng-model="form.furnished" name="furnished">Furnished</ion-toggle>
+            <label class="item item-input item-stacked-label" name="photo">
+                <span class="input-label">Add Photo</span>
+                <button class="button button-icon icon ion-camera" ng-click="getPhoto()">Take Photo</button>
+            </label>
+            <button ng-show="editMode" id="editPropertyDetails-button12" class="button button-positive button-block"
+                    ng-disabled="propertyForm.$invalid">Update</button>
+        </form>
+        <button ng-show="editMode" id="editPropertyDetails-button13" class="button button-positive button-block"
+                ng-click="onEdit()">Cancel</button>
+        <button ng-show="!editMode" id="editPropertyDetails-button14" class="button button-positive button-block"
+                ng-click="onEdit()">Edit</button>
+        <button ng-show="!editMode" id="editPropertyDetails-button15" class="button button-positive button-block"
+                ng-click="onUnlist()">Unlist</button>
+        <button ng-show="!editMode" id="editPropertyDetails-button15" class="button button-positive button-block"
+                ng-click="onDelete()">Delete</button>
+
+    </ion-content>
+</ion-view>

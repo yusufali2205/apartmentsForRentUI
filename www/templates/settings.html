@@ -1,18 +1,38 @@
-<ion-view title="Settings">
+<ion-view title="Settings" ng-controller="settingsCtrl">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <form class="list">
-            <label class="item item-input" name="name">
-                <span class="input-label">Name</span>
-                <input type="text" placeholder="">
+        <div ng-show="!editMode">
+            <div>Email: {{userLogged.email}}</div>
+            <div>Name: {{userLogged.firstName}} {{userLogged.lastName}}</div>
+            <div>Phone No: {{userLogged.phoneNo}}</div>
+            <div>City: {{userLogged.city}}</div>
+        </div>
+        <form ng-show="editMode" class="list" name="userForm" ng-submit="onUpdate()">
+            <label class="item item-input" name="email">
+                <span class="input-label">Email</span>
+                <span>{{user.email}}</span>
+            </label>
+            <label class="item item-input" name="firstName">
+                <span class="input-label">First Name</span>
+                <input type="text" ng-model="user.firstName" placeholder="" required>
+            </label>
+            <label class="item item-input" name="lastName">
+                <span class="input-label">Last Name</span>
+                <input type="text" ng-model="user.lastName" placeholder="">
             </label>
             <label class="item item-input">
                 <span class="input-label">Mobile</span>
-                <input type="tel" placeholder="">
+                <input type="tel" ng-model="user.phoneNo" placeholder="" required>
             </label>
-            <label class="item item-input" name="email">
-                <span class="input-label">Email</span>
-                <input type="email" placeholder="">
+            <label class="item item-input" name="city">
+                <span class="input-label">City</span>
+                <input type="text" ng-model="user.city" placeholder="">
             </label>
+            <button id="settings-button12" class="button button-positive button-block"
+                    ng-disabled="userForm.$invalid">Update</button>
         </form>
+        <button ng-show="editMode" id="settings-button13" class="button button-positive button-block"
+                ng-click="onEdit()">Cancel</button>
+        <button ng-show="!editMode" id="settings-button14" class="button button-positive button-block"
+                ng-click="onEdit()">Edit</button>
     </ion-content>
 </ion-view>

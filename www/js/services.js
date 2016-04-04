@@ -1,7 +1,7 @@
 angular.module('app.services', [])
 
 .constant("myConfig", {
-  "url": "http://10.132.27.80",
+  "url": "http://10.132.26.86",
   "port": "8080",
   "googleGeocodeURL": "https://maps.googleapis.com/maps/api/geocode/json",
   "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw"
@@ -35,7 +35,8 @@ angular.module('app.services', [])
     removeUser: removeUser,
     getUserById: getUserById,
     getUserByEmail: getUserByEmail,
-    logout: logout
+    logout: logout,
+    updateUser: updateUser
   });
 
   function addUser(firstName, lastName, email, phone, city, type, password) {
@@ -77,6 +78,26 @@ angular.module('app.services', [])
       , handleError ) );
   }
 
+  function updateUser(userId, email, firstName, lastName, phoneNo, city, password){
+    var request = $http({
+      method: "put",
+      url: USER_URL + "/" + userId,
+      params: {
+        action: "put"
+      },
+      data: {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNo: phoneNo,
+        city: city,
+        userType: 'user',
+        password: password
+      }
+    });
+    return( request.then( handleSuccess, handleError ) );
+  }
+  
   function logout() {
     var request = $http({
       method: "post",
@@ -171,7 +192,11 @@ angular.module('app.services', [])
       verifyAddress: verifyAddress,
       checkPropertyByPlaceId: checkPropertyByPlaceId,
       getPropertyFiltered: getPropertyFiltered,
-      getPropertyPageByLink: getPropertyPageByLink
+      getPropertyPageByLink: getPropertyPageByLink,
+      editPropertyDetails: editPropertyDetails,
+      listMyProperties: listMyProperties,
+      deleteProperty: deleteProperty,
+      getReviewByUserAndProperty: getReviewByUserAndProperty
     });
 
     function addProperty(propertyName, propertyType, bhk, geoLat, geoLong , address,
@@ -206,10 +231,50 @@ angular.module('app.services', [])
       return( request.then( handleSuccess, handleError ) );
     }
 
+    function editPropertyDetails(propertyId, propertyName, propertyType, bhk, geoLat, geoLong , address,
+                         floorArea, availableFrom, propertyPrice, furnished,
+                         userId, pictureLink, placeId) {
+      console.log("Service: "+placeId + " " + geoLat + " " + geoLong);
+      var utc = new Date().toJSON().slice(0,10);
+      var request = $http({
+        method: "put",
+        url: PROPERTY_URL + "/" + propertyId,
+        params: {
+          action: "put"
+        },
+        data: {
+          propertyName: propertyName,
+          type: propertyType,
+          bhk: bhk,
+          geoLat: geoLat,
+          geoLong: geoLong,
+          address: address,
+          floorArea: floorArea,
+          availableFrom: availableFrom,
+          price: propertyPrice,
+          furnished: furnished,
+          userId: userId,
+          pictureLink: pictureLink,
+          approved: false,
+          postedOn: utc,
+          placeId: placeId
+        }
+      });
+      return( request.then( handleSuccess, handleError ) );
+    }
+
     function getAllProperty() {
       var request = $http({
         method: "get",
         url: PROPERTY_URL
+      });
+      return( request.then( handleSuccess, handleError ) );
+    }
+
+    function deleteProperty(propertyId) {
+      var request = $http({
+        method: "delete",
+        url: PROPERTY_URL + "/" + propertyId
       });
       return( request.then( handleSuccess, handleError ) );
     }
@@ -280,6 +345,18 @@ angular.module('app.services', [])
       return( request.then( handleSuccess, handleError ) );
     }
 
+    function listMyProperties( userId ) {
+      var request = $http({
+        method: "get",
+        url: PROPERTY_URL + "/search/findByUserId",
+        params: {
+          action: "get",
+          userId: userId
+        }
+      });
+      return( request.then( handleSuccess, handleError ) );
+    }
+
     function getOwnerByLink( propertyLink ) {
       var request = $http({
         method: "get",
@@ -337,6 +414,18 @@ angular.module('app.services', [])
       var request = $http({
         method: "get",
         url: link
+      });
+      return( request.then( handleSuccess, handleError ) );
+    }
+
+    function getReviewByUserAndProperty(userId, propertyId){
+      var request = $http({
+        method: "get",
+        url: PROPERTY_URL + "/search/getReviewsByPropertyIdAndUserId",
+        params: {
+          userId: userId,
+          propertyId: propertyId
+        }
       });
       return( request.then( handleSuccess, handleError ) );
     }

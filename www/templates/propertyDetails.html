@@ -14,8 +14,11 @@
     <h3>Average Rating</h3>
     {{avgRating}}
 
-    <h3 ng-show="userLogged">Write a review</h3>
-    <form ng-show="userLogged" class="list" ng-submit="addReview()">
+    <h3 ng-show="userLogged && myReview.length>0">Your review</h3>
+    <p ng-show="userLogged && myReview.length>0">{{myReview}}</p>
+
+    <h3 ng-show="userLogged && myReview.length<1">Write a review</h3>
+    <form ng-show="userLogged && myReview.length<1" class="list" ng-submit="addReview()">
       <label class="item item-select" name="giveRating">
         <span class="input-label">Rating</span>
         <select ng-model="reviewForm.rating" ng-required="required">

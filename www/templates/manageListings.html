@@ -1,11 +1,19 @@
-<ion-view title="Manage Listings">
+<ion-view title="My Property Listings" ng-controller="manageListingsCtrl" ng-init="getMyProperties()">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <ion-list>
+        <ion-refresher
+                pulling-text="Pull to refresh..."
+                on-refresh="getMyProperties()">
+        </ion-refresher>
+        <ion-list ng-repeat="property in propertyList">
             <ion-item class="item-thumbnail-left">
                 <img>
-                <h2>List with thumbnails</h2>
-                <p>List of all properties</p>
+                <a ui-sref="menu.editPropertyDetails({propertyId: property.propertyId})"><h1>{{property.propertyName}}</h1></a>
+                <h2>{{property.type}}</h2>
+                <h2>{{property.price | currency}}/month</h2>
+                <p>{{property.address}}</p>
+                <p>Posted on: {{property.postedOn}}</p>
             </ion-item>
+            <ion-item class="item-divider"></ion-item>
         </ion-list>
     </ion-content>
 </ion-view>
