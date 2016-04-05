@@ -6,15 +6,15 @@
       </ion-refresher>
       <ion-list ng-repeat="property in propertyList">
             <ion-item class="item-thumbnail-left">
-                <img>
-                <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><h1>{{property.propertyName}}</h1></a>
-                <h2>{{property.type}}</h2>
+                <img ng-src="#">
+                <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3">{{property.propertyName}}</div></a>
                 <h2>{{property.price | currency}}/month</h2>
-                <p>{{property.address}}</p>
-                <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Contact Owner</a>
+                <p>{{property.type}}</p>
+                <div class="item-text-wrap">{{property.address}}</div>
+                <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Owner</a>
                 <p>Posted on: {{property.postedOn}}</p>
             </ion-item>
-            <ion-item class="item-divider"></ion-item>
+
         </ion-list>
       <a ng-show="links.firstPage" href="#" onclick="loadPageWithLink(links.firstPage)">First</a>
       <a ng-show="links.previousPage" href="#" onclick="loadPageWithLink(links.previousPage)">Previous</a>

@@ -1,7 +1,6 @@
-<ion-view title="Search" ng-controller="searchCtrl">
+<ion-view title="Start your search here" ng-controller="searchCtrl">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
         <form class="list" ng-submit="getFilteredProperty()">
-            <h3>Start your search here</h3>
             <label class="item item-input" name="search">
                 <i class="icon ion-search placeholder-icon"></i>
                 <input type="search" ng-model="criteria.propertyName" placeholder="Property name or address">
@@ -18,8 +17,8 @@
             </label>
             <label class="item item-input" name="price">
                 <span class="input-label">Budget</span>
-                Min: &nbsp;<input type="number" ng-model="criteria.priceMin" value="0" min="0" max="5000" name="priceMin">
-                Max: &nbsp;<input type="number" ng-model="criteria.priceMax" value="5000" min="0" max="5000" name="priceMax">
+                <div class="item-text-wrap">Min<input type="number" ng-model="criteria.priceMin" value="0" min="0" max="5000" name="priceMin"></div>
+                <div class="item-text-wrap">Max<input type="number" ng-model="criteria.priceMax" value="5000" min="0" max="5000" name="priceMax"></div>
             </label>
             <label class="item item-select" name="bedrooms">
                 <span class="input-label">Bedrooms</span>
@@ -49,7 +48,6 @@
                 <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Contact Owner</a>
                 <p>Posted on: {{property.postedOn}}</p>
             </ion-item>
-            <ion-item class="item-divider"></ion-item>
         </ion-list>
         <a ng-show="links.firstPage" href="#" onclick="loadPageWithLink(links.firstPage)">First</a>
         <a ng-show="links.previousPage" href="#" onclick="loadPageWithLink(links.previousPage)">Previous</a>

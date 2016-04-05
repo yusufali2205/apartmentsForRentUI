@@ -1,7 +1,7 @@
 angular.module('app.services', [])
 
 .constant("myConfig", {
-  "url": "http://10.132.26.86",
+  "url": "http://10.132.25.144",
   "port": "8080",
   "googleGeocodeURL": "https://maps.googleapis.com/maps/api/geocode/json",
   "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw"
@@ -97,7 +97,7 @@ angular.module('app.services', [])
     });
     return( request.then( handleSuccess, handleError ) );
   }
-  
+
   function logout() {
     var request = $http({
       method: "post",

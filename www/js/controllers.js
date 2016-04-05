@@ -583,7 +583,7 @@ angular.module('app.controllers', [])
             console.log(responseData);
             $scope.propertySelected = responseData;
             $scope.mapImageURL = "https://maps.googleapis.com/maps/api/staticmap?center=" + responseData.geoLat
-              + "," + responseData.geoLong + "zoom=14&size=100x100&markers=color:red%7C" + responseData.geoLat + ","
+              + "," + responseData.geoLong + "zoom=12&size=450x450&markers=color:red%7C" + responseData.geoLat + ","
               + responseData.geoLong;
             $scope.navigateURL = "http://maps.google.com/?q=" + responseData.geoLat + "," + responseData.geoLong;
             $scope.getOwnerDetails();

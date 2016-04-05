@@ -115,6 +115,7 @@ angular.module('app.routes', [])
     })
 
     .state('menu.propertyDetails', {
+      cache: false,
       url: '/propertyDetails/:propertyId',
       views: {
         'side-menu21': {
