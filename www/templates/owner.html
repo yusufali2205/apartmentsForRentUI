@@ -1,6 +1,19 @@
 <ion-view title="Owner Details" ng-controller="ownerCtrl" ng-init="getOwnerDetails()">
   <ion-content overflow-scroll="true" padding="true" class="has-header">
-    <h2>Owner Details</h2>
-    {{owner}}
+    <div class="h3 padding-left">Owner</div>
+    <div class="card">
+      <div class="row">
+        <div class="col">Name</div>
+        <div class="col">{{owner.firstName}} {{owner.lastName}}</div>
+      </div>
+      <div class="row">
+        <div class="col">Email</div>
+        <div class="col">{{owner.email}}</div>
+      </div>
+      <div class="row">
+        <div class="col">Phone</div>
+        <div class="col">{{owner.phoneNo}}</div>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

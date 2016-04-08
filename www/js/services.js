@@ -1,12 +1,13 @@
 angular.module('app.services', [])
 
 .constant("myConfig", {
-  "url": "http://10.132.25.144",
+  "url": "http://10.132.8.122",
   "port": "8080",
   "googleGeocodeURL": "https://maps.googleapis.com/maps/api/geocode/json",
-  "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw"
+  "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw",
+  "apiAccessToken": "aUo3TpibnR"
 })
-
+ 
 .factory('Camera', ['$q', function($q) {
   return {
     getPicture: function(options) {
@@ -24,7 +25,27 @@ angular.module('app.services', [])
   }
 }])
 
-.service('UserRepo', ['myConfig', '$http', '$q', function(myConfig, $http, $q){
+.factory('$localStorage', ['$window', function($window) {
+  return {
+    set: function(key, value) {
+      $window.localStorage[key] = value;
+    },
+    get: function(key, defaultValue) {
+      return $window.localStorage[key] || defaultValue;
+    },
+    setObject: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getObject: function(key) {
+      return JSON.parse($window.localStorage[key] || null);
+    },
+    remove: function(key) {
+      $window.localStorage.removeItem(key);
+    }
+  }
+}])
+
+.service('UserRepo', ['myConfig', '$http', '$q', function(myConfig, $http, $q, $localStorage){
   var USER_URL = myConfig.url + ":" + myConfig.port + "/users";
   var LOGIN_URL = myConfig.url + ":" + myConfig.port + "/login";
   var LOGOUT_URL = myConfig.url + ":" + myConfig.port + "/logout";
@@ -71,8 +92,6 @@ angular.module('app.services', [])
     });
     return( request.then(
       function ( response ) {
-        userLogged = response.data;
-        loggedIn = true;
         return( response.data );
       }
       , handleError ) );
@@ -108,8 +127,6 @@ angular.module('app.services', [])
     });
     return( request.then(
       function ( response ) {
-        userLogged = {};
-        loggedIn = false;
         return( response.data );
       }
       , handleError ) );
@@ -128,8 +145,6 @@ angular.module('app.services', [])
     });
     return( request.then(
       function ( response ) {
-        userLogged = {};
-        loggedIn = false;
         return( response.data );
       }
       , handleError ) );

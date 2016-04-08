@@ -46,6 +46,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu', {
+    cache: false,
     url: '/side-menu21',
     templateUrl: 'templates/menu.html',
     abstract:true,
@@ -85,6 +86,7 @@ angular.module('app.routes', [])
 
   .state('menu.editPropertyDetails', {
     url: '/editPropertyDetails/:propertyId',
+    cache: false,
     views: {
       'side-menu21': {
         templateUrl: 'templates/editPropertyDetails.html',

@@ -1,15 +1,39 @@
 <ion-view title="Edit Property" ng-controller="editPropertyDetailsCtrl" ng-init="getPropertyById()">
-    <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <h3>Edit property details</h3>
-        <div ng-show="!editMode">
-            <p>Name: {{propertySelected.propertyName}}</p>
-            <p>Type: {{propertySelected.type}}</p>
-            <p>Rooms: {{propertySelected.bhk}}</p>
-            <p>Address: {{propertySelected.address}}</p>
-            <p>Floor area: {{propertySelected.floorArea}}</p>
-            <p>Possession from: {{propertySelected.availableFrom}}</p>
-            <p>Rent: {{propertySelected.price}}</p>
-            <p>Furnished: {{propertySelected.furnished}}</p>
+    <ion-content scroll="true" padding="true" class="has-header">
+        <div class="h3">Edit property details</div>
+        <div ng-show="!editMode" class="card">
+          <div class="row">
+            <div class="col">Name</div>
+            <div class="col item-text-wrap">{{propertySelected.propertyName}}</div>
+          </div>
+          <div class="row">
+            <div class="col">Type</div>
+            <div class="col">{{propertySelected.type}}</div>
+          </div>
+          <div class="row">
+            <div class="col">Rooms</div>
+            <div class="col">{{propertySelected.bhk}}</div>
+          </div>
+          <div class="row">
+            <div class="col">address</div>
+            <div class="col item-text-wrap">{{propertySelected.address}}</div>
+          </div>
+          <div class="row">
+            <div class="col">Floor area (sq ft)</div>
+            <div class="col">{{propertySelected.floorArea}}</div>
+          </div>
+          <div class="row">
+            <div class="col">Possession from</div>
+            <div class="col">{{propertySelected.availableFrom}}</div>
+          </div>
+          <div class="row">
+            <div class="col">Rent (per month)</div>
+            <div class="col">{{propertySelected.price}}</div>
+          </div>
+          <div class="row">
+            <div class="col">Furnished</div>
+            <div class="col">{{propertySelected.furnished}}</div>
+          </div>
         </div>
 
         <form ng-show="editMode" class="list" name="propertyForm" ng-submit="onUpdate()">
@@ -62,14 +86,16 @@
             <button ng-show="editMode" id="editPropertyDetails-button12" class="button button-positive button-block"
                     ng-disabled="propertyForm.$invalid">Update</button>
         </form>
-        <button ng-show="editMode" id="editPropertyDetails-button13" class="button button-positive button-block"
-                ng-click="onEdit()">Cancel</button>
-        <button ng-show="!editMode" id="editPropertyDetails-button14" class="button button-positive button-block"
-                ng-click="onEdit()">Edit</button>
-        <button ng-show="!editMode" id="editPropertyDetails-button15" class="button button-positive button-block"
-                ng-click="onUnlist()">Unlist</button>
-        <button ng-show="!editMode" id="editPropertyDetails-button15" class="button button-positive button-block"
-                ng-click="onDelete()">Delete</button>
+      <button ng-show="editMode" id="editPropertyDetails-button13" class="button button-positive button-block"
+              ng-click="onEdit()">Cancel</button>
+      <div class="row">
+        <div class="col"> <button ng-show="!editMode" id="editPropertyDetails-button14" class="button button-positive button-block"
+                ng-click="onEdit()">Edit</button></div>
+          <div class="col"><button ng-show="!editMode" id="editPropertyDetails-button15" class="button button-energized button-block"
+                ng-click="onUnlist()">Unlist</button></div>
+            <div class="col"> <button ng-show="!editMode" id="editPropertyDetails-button15" class="button button-assertive button-block"
+                ng-click="onDelete()">Delete</button></div>
+      </div>
 
     </ion-content>
 </ion-view>

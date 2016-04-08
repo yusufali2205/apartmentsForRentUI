@@ -1,11 +1,24 @@
 <ion-view title="Settings" ng-controller="settingsCtrl">
-    <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <div ng-show="!editMode">
-            <div>Email: {{userLogged.email}}</div>
-            <div>Name: {{userLogged.firstName}} {{userLogged.lastName}}</div>
-            <div>Phone No: {{userLogged.phoneNo}}</div>
-            <div>City: {{userLogged.city}}</div>
+    <ion-content scroll="true" padding="true" class="has-header">
+        <div ng-show="!editMode" class="card">
+          <div class="row">
+            <div class="col">Email</div>
+            <div class="col">{{userLogged.email}}</div>
+          </div>
+          <div class="row">
+            <div class="col">Name</div>
+            <div class="col">{{userLogged.firstName}} {{userLogged.lastName}}</div>
+          </div>
+          <div class="row">
+            <div class="col">Phone No</div>
+            <div class="col">{{userLogged.phoneNo}}</div>
+          </div>
+          <div class="row">
+            <div class="col">City</div>
+            <div class="col">{{userLogged.city}}</div>
+          </div>
         </div>
+
         <form ng-show="editMode" class="list" name="userForm" ng-submit="onUpdate()">
             <label class="item item-input" name="email">
                 <span class="input-label">Email</span>

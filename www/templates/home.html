@@ -6,7 +6,7 @@
       </ion-refresher>
       <ion-list ng-repeat="property in propertyList">
             <ion-item class="item-thumbnail-left">
-                <img ng-src="#">
+                <img ng-src="" err-src="../images/no-image.png">
                 <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3">{{property.propertyName}}</div></a>
                 <h2>{{property.price | currency}}/month</h2>
                 <p>{{property.type}}</p>

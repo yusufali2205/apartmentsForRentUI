@@ -6,9 +6,10 @@
         </ion-refresher>
         <ion-list ng-repeat="property in propertyList">
             <ion-item class="item-thumbnail-left">
-                <img>
-                <a ui-sref="menu.editPropertyDetails({propertyId: property.propertyId})"><h1>{{property.propertyName}}</h1></a>
-                <h2>{{property.type}}</h2>
+                <img ng-src="" err-src="../images/no-image.png">
+                <a ui-sref="menu.editPropertyDetails({propertyId: property.propertyId})"><div class="h3">{{property.propertyName}}</div></a>
+              <a ui-sref="menu.editPropertyDetails({propertyId: property.propertyId})"><div ng-if="!property.propertyName">View property</div></a>
+              <h2>{{property.type}}</h2>
                 <h2>{{property.price | currency}}/month</h2>
                 <p>{{property.address}}</p>
                 <p>Posted on: {{property.postedOn}}</p>

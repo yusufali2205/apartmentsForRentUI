@@ -3,7 +3,7 @@
     <div class="list card">
       <div class="h3 padding-left">{{propertySelected.price | currency}}/month</div>
       <div class="item item-image">
-        <img src="#">
+        <img ng-src="" err-src="../images/no-image.png">
       </div>
       <span class="h3 padding-left">{{propertySelected.propertyName}}</span>
       <div class="padding-left">{{propertySelected.address}}</div>
@@ -26,7 +26,7 @@
           <div class="col">{{propertySelected.bhk}}</div>
         </div>
         <div class="row">
-          <div class="col">Floor area</div>
+          <div class="col">Floor area (sq ft)</div>
           <div class="col">{{propertySelected.floorArea}}</div>
         </div>
         <div class="row">
@@ -71,7 +71,7 @@
         <form class="list" ng-submit="addReview()">
           <label class="item item-select" name="giveRating">
             <span class="input-label">Rating</span>
-            <select ng-model="reviewForm.rating" ng-required="required">
+            <select ng-model="reviewForm.rating" required>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>

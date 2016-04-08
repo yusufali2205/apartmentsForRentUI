@@ -62,8 +62,8 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('listYourPropertyCtrl', function($scope, $rootScope, $ionicPopup, $state, $ionicHistory, PropertyRepo, Camera) {
-  if ($rootScope.userLogged == null) {
+.controller('listYourPropertyCtrl', function($scope, $rootScope, $localStorage, $ionicPopup, $state, $ionicHistory, PropertyRepo, Camera) {
+  if ($localStorage.getObject('user') == null) {
     $ionicHistory.nextViewOptions({
       disableBack: true
     });
@@ -162,7 +162,7 @@ angular.module('app.controllers', [])
                     /* Adding the property */
                     PropertyRepo.addProperty($scope.form.propertyName, $scope.form.type, $scope.form.bhk, geo_lat, geo_lng,
                       $scope.form.address, $scope.form.floorArea, $scope.form.availableFrom, $scope.form.price, $scope.form.furnished,
-                      $rootScope.userLogged.userId, "", place_id)
+                      $localStorage.getObject('user').userId, "", place_id)
                       .then(
                         function (responseData) {
                           console.log("-----Property Added-----");
@@ -214,7 +214,7 @@ angular.module('app.controllers', [])
 }
 })
 
-.controller('loginCtrl', function($scope, $location, $state, $rootScope, $ionicHistory, UserRepo) {
+.controller('loginCtrl', function($scope, $location, $state, $rootScope, $ionicHistory, UserRepo, $localStorage) {
   $scope.user = {
     firstName: "",
     lastName: "",
@@ -237,7 +237,7 @@ angular.module('app.controllers', [])
           UserRepo.getUserByEmail($scope.user.email)
             .then(
               function(response){
-                $rootScope.userLogged = response;
+                $localStorage.setObject('user', response);
                 console.log("-----User Details Fetched-----");
                 console.log(response);
               },
@@ -294,17 +294,17 @@ angular.module('app.controllers', [])
   };
 })
 
-.controller('manageListingsCtrl', function($scope, $rootScope, $state, $ionicHistory, PropertyRepo) {
+.controller('manageListingsCtrl', function($scope, $rootScope, $localStorage, $state, $ionicHistory, PropertyRepo) {
   $scope.propertyList = [];
   $scope.getMyProperties = function () {
-    if (!$rootScope.userLogged) {
+    if (!$localStorage.getObject('user')) {
       $ionicHistory.nextViewOptions({
         disableBack: true
       });
       $state.go('menu.login');
     }
     else {
-      PropertyRepo.listMyProperties($rootScope.userLogged.userId)
+      PropertyRepo.listMyProperties($localStorage.getObject('user').userId)
         .then(
           function (responseData) {
             console.log("-----My properties fetched-----");
@@ -324,8 +324,8 @@ angular.module('app.controllers', [])
   };
 })
 
-  .controller('editPropertyDetailsCtrl', function($scope, $stateParams, $rootScope, $ionicPopup, $state, $ionicHistory, PropertyRepo) {
-    if ($rootScope.userLogged == null) {
+  .controller('editPropertyDetailsCtrl', function($scope, $stateParams, $rootScope, $localStorage, $ionicPopup, $state, $ionicHistory, PropertyRepo) {
+    if ($localStorage.getObject('user') == null) {
       $ionicHistory.nextViewOptions({
         disableBack: true
       });
@@ -433,7 +433,7 @@ angular.module('app.controllers', [])
                 $ionicHistory.nextViewOptions({
                   disableBack: true
                 });
-                $state.go('menu.manageListings', {}, {reload: true});
+                $state.go('menu.manageListings');
               },
               function (error) {
                 console.log("-----Error in property deletion-----");
@@ -448,22 +448,22 @@ angular.module('app.controllers', [])
   }
 })
 
-.controller('settingsCtrl', function($scope, $rootScope, $ionicHistory, $state, UserRepo) {
-  if ($rootScope.userLogged == null) {
+.controller('settingsCtrl', function($scope, $rootScope, $localStorage, $ionicHistory, $state, UserRepo) {
+  if ($localStorage.getObject('user') == null) {
     $ionicHistory.nextViewOptions({
       disableBack: true
     });
     $state.go('menu.login');
   }
   else {
-
+    $scope.userLogged = $localStorage.getObject('user');
     $scope.user = {
-      firstName: $rootScope.userLogged.firstName,
-      lastName: $rootScope.userLogged.lastName,
-      phoneNo: $rootScope.userLogged.phoneNo,
-      userId: $rootScope.userLogged.userId,
-      email: $rootScope.userLogged.email,
-      city: $rootScope.userLogged.city
+      firstName: $localStorage.getObject('user').firstName,
+      lastName: $localStorage.getObject('user').lastName,
+      phoneNo: $localStorage.getObject('user').phoneNo,
+      userId: $localStorage.getObject('user').userId,
+      email: $localStorage.getObject('user').email,
+      city: $localStorage.getObject('user').city
     };
 
     $scope.onEdit = function(){
@@ -475,13 +475,14 @@ angular.module('app.controllers', [])
 
     $scope.onUpdate = function () {
       UserRepo.updateUser($scope.user.userId, $scope.user.email, $scope.user.firstName, $scope.user.lastName,
-        $scope.user.phoneNo, $scope.user.city, $rootScope.userLogged.password)
+        $scope.user.phoneNo, $scope.user.city, $localStorage.getObject('user').password)
         .then(
           function (responseData) {
             console.log("-----User details updated-----");
             console.log(responseData);
             $scope.editMode = false;
-            $rootScope.userLogged = responseData;
+            $localStorage.setObject('user', responseData);
+            $scope.userLogged = $localStorage.getObject('user');
           },
           function (error) {
             console.log("-----Error in updating user details-----");
@@ -492,8 +493,8 @@ angular.module('app.controllers', [])
   }
 })
 
-.controller('addPicturesCtrl', function($scope, $rootScope, $ionicHistory, $state, Camera) {
-  if ($rootScope.userLogged == null) {
+.controller('addPicturesCtrl', function($scope, $rootScope, $localStorage, $ionicHistory, $state, Camera) {
+  if ($localStorage.getObject('user') == null) {
     $ionicHistory.nextViewOptions({
       disableBack: true
     });
@@ -514,14 +515,17 @@ angular.module('app.controllers', [])
 
 })
 
-  .controller('menuCtrl', function($scope, $rootScope, $ionicHistory, $state, UserRepo) {
+  .controller('menuCtrl', function($scope, $rootScope, $ionicHistory, $state, UserRepo, $localStorage) {
+    $scope.userLogged = $localStorage.getObject('user');
+    console.log($scope.userLogged);
     $scope.logout = function() {
       UserRepo.logout()
         .then(
           function(responseData){
             console.log("-----Logged Out-----");
             console.log(responseData);
-            $rootScope.userLogged = false;
+            $localStorage.remove('user');
+            $scope.userLogged = null;
             $ionicHistory.nextViewOptions({
               disableBack: true
             });
@@ -532,7 +536,10 @@ angular.module('app.controllers', [])
             console.warn(errorMessage);
           }
         )
-    }
+    };
+
+    $scope.checkUser = function(){
+      $scope.userLogged = $localStorage.getObject('user');    }
   })
 
   .controller('ownerCtrl', function($scope, $stateParams, UserRepo) {
@@ -554,8 +561,9 @@ angular.module('app.controllers', [])
     }
   })
 
-  .controller('propertyDetailsCtrl', function($scope, $stateParams, $rootScope, PropertyRepo, UserRepo) {
+  .controller('propertyDetailsCtrl', function($scope, $stateParams, $rootScope, $localStorage, PropertyRepo, UserRepo) {
     var propertyId = $stateParams.propertyId;
+    $scope.userLogged = $localStorage.getObject('user');
     console.log(propertyId);
     $scope.propertyId = propertyId;
     $scope.propertySelected = {};
@@ -649,7 +657,7 @@ angular.module('app.controllers', [])
     };
 
     $scope.addReview = function() {
-      PropertyRepo.addReview($rootScope.userLogged.userId, $scope.propertyId, $scope.reviewForm.rating, $scope.reviewForm.review)
+      PropertyRepo.addReview($localStorage.getObject('user').userId, $scope.propertyId, $scope.reviewForm.rating, $scope.reviewForm.review)
         .then(
           function(responseData){
             console.log("-----Review Posted-----");
@@ -666,8 +674,8 @@ angular.module('app.controllers', [])
     };
 
     $scope.getMyReviews = function(){
-      if($rootScope.userLogged){
-        PropertyRepo.getReviewByUserAndProperty($rootScope.userLogged.userId, $scope.propertyId)
+      if($localStorage.getObject('user')){
+        PropertyRepo.getReviewByUserAndProperty($localStorage.getObject('user').userId, $scope.propertyId)
           .then(
             function(responseData){
               console.log("-----My reviews fetched-----");
