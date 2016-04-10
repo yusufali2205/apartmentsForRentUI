@@ -5,8 +5,9 @@
         on-refresh="getAllProperty()">
       </ion-refresher>
       <ion-list ng-repeat="property in propertyList">
-            <ion-item class="item-thumbnail-left">
-                <img ng-src="" err-src="../images/no-image.png">
+        <!--
+        <ion-item class="item-thumbnail-left">
+                <img ng-src="https://s3-us-west-2.amazonaws.com/rentappimages/{{property.pictureLink}}" err-src="images/no-image.png">
                 <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3">{{property.propertyName}}</div></a>
                 <h2>{{property.price | currency}}/month</h2>
                 <p>{{property.type}}</p>
@@ -14,7 +15,34 @@
                 <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Owner</a>
                 <p>Posted on: {{property.postedOn}}</p>
             </ion-item>
-
+        -->
+        <ion-item>
+          <div class="item item-image wrapper" ui-sref="menu.propertyDetails({propertyId: property.propertyId})">
+            <img ng-src="https://s3-us-west-2.amazonaws.com/rentappimages/{{property.pictureLink}}" err-src="images/no-image.png">
+            <p>{{property.price | currency}}/month</p>
+            <p2>{{property.type}}</p2>
+          </div>
+          <div class="row">
+            <div class="col">
+              <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3 item-text-wrap">{{property.propertyName}}</div></a>
+              <a ng-hide="property.propertyName" ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3 item-text-wrap">View Property</div></a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="item-text-wrap">{{property.address}}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-10">
+              <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Owner</a>
+            </div>
+            <div class="col text-right">
+              <div>Posted on: {{property.postedOn}}</div>
+            </div>
+          </div>
+        </ion-item>
+        <div class="item-divider"></div>
         </ion-list>
       <a ng-show="links.firstPage" href="#" onclick="loadPageWithLink(links.firstPage)">First</a>
       <a ng-show="links.previousPage" href="#" onclick="loadPageWithLink(links.previousPage)">Previous</a>

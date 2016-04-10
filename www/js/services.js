@@ -1,13 +1,13 @@
 angular.module('app.services', [])
 
 .constant("myConfig", {
-  "url": "http://10.132.8.122",
+  "url": "http://10.132.7.184",
   "port": "8080",
   "googleGeocodeURL": "https://maps.googleapis.com/maps/api/geocode/json",
   "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw",
   "apiAccessToken": "aUo3TpibnR"
 })
- 
+
 .factory('Camera', ['$q', function($q) {
   return {
     getPicture: function(options) {
@@ -217,7 +217,7 @@ angular.module('app.services', [])
     function addProperty(propertyName, propertyType, bhk, geoLat, geoLong , address,
                          floorArea, availableFrom, propertyPrice, furnished,
                          userId, pictureLink, placeId) {
-      console.log("Service: "+placeId + " " + geoLat + " " + geoLong);
+      console.log("Service:"+ pictureLink);
       var utc = new Date().toJSON().slice(0,10);
       var request = $http({
         method: "post",

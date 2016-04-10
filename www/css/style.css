@@ -8,10 +8,20 @@ body {
 
 .wrapper p {
     background-color: black;
-    bottom: 5%;
+    bottom: 10px;
     color: white;
     font-size: 1.25em;
     left: 0;
     padding: 0.25em 0.75em;
     position: absolute;
+}
+
+.wrapper p2 {
+  background-color: black;
+  bottom: 50px;
+  color: white;
+  font-size: 1.25em;
+  left: 0;
+  padding: 0.25em 0.75em;
+  position: absolute;
 }

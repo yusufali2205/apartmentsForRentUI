@@ -92,10 +92,50 @@ angular.module('app.controllers', [])
     Camera.getPicture().then(function (imageURI) {
       $scope.form.pictureLink = imageURI;
       console.log(imageURI);
+      uploadPicture();
     }, function (err) {
       console.warn(err);
     });
   };
+    /* for photo upload on s3*/
+    $scope.creds = {
+      bucket: '',
+      access_key: '',
+      secret_key: ''
+    };
+
+    var uploadPicture = function(fileName) {
+      console.log("Calling upload");
+      // Configure The S3 Object
+      AWS.config.update({ accessKeyId: $scope.creds.access_key, secretAccessKey: $scope.creds.secret_key });
+      AWS.config.region = 'us-west-2';
+      var bucket = new AWS.S3({ params: { Bucket: $scope.creds.bucket } });
+
+      if($scope.file) {
+        var params = { Key: fileName, ContentType: $scope.file.type, Body: $scope.file, ServerSideEncryption: 'AES256' };
+
+        bucket.putObject(params, function(err, data) {
+            if(err) {
+              // There Was An Error With Your S3 Config
+              alert(err);
+              return false;
+            }
+            else {
+              // Success!
+              alert('Upload Done:' +data);
+            }
+          })
+          .on('httpUploadProgress',function(progress) {
+            // Log Progress Information
+            console.log(Math.round(progress.loaded / progress.total * 100) + '% done');
+          });
+      }
+      else {
+        // No File Selected
+        alert('No File Selected');
+      }
+    };
+    /*photo upload on s3 finish*/
 
   $scope.autoFetchAddress = function () {
     PropertyRepo.verifyAddress($scope.form.address)
@@ -158,11 +198,17 @@ angular.module('app.controllers', [])
                     var place_id = verifierResponse.results[0].place_id;
                     var geo_lat = verifierResponse.results[0].geometry.location.lat;
                     var geo_lng = verifierResponse.results[0].geometry.location.lng;
+                    if($scope.file.name){
+                      $scope.form.pictureLink = "propertyImages/" + $scope.file.name.split('.')[0] +
+                        new Date().getTime() + '.' + $scope.file.name.split('.')[1];
+                      uploadPicture($scope.form.pictureLink);
+                    }
+                    console.log('Picture Link:' +$scope.form.pictureLink);
                     console.log(place_id + " " + geo_lat + " " + geo_lng);
                     /* Adding the property */
                     PropertyRepo.addProperty($scope.form.propertyName, $scope.form.type, $scope.form.bhk, geo_lat, geo_lng,
                       $scope.form.address, $scope.form.floorArea, $scope.form.availableFrom, $scope.form.price, $scope.form.furnished,
-                      $localStorage.getObject('user').userId, "", place_id)
+                      $localStorage.getObject('user').userId, $scope.form.pictureLink, place_id)
                       .then(
                         function (responseData) {
                           console.log("-----Property Added-----");
@@ -501,9 +547,10 @@ angular.module('app.controllers', [])
     $state.go('menu.login');
   }
   else {
-
+    $scope.imagePath = "";
     $scope.getPhoto = function() {
       Camera.getPicture().then(function(imageURI) {
+        $scope.imagePath = imageURI;
         console.log(imageURI);
       }, function(err) {
         console.warn(err);

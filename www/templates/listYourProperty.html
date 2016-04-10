@@ -52,10 +52,13 @@
             <ion-toggle toggle-class="toggle-positive" ng-model="form.furnished" name="furnished">Furnished</ion-toggle>
             <label class="item item-input item-stacked-label" name="photo">
               <span class="input-label">Add Photo</span>
-              <button class="button button-icon icon ion-camera" ng-click="getPhoto()">Take Photo</button>
+             <!-- <button class="button button-icon icon ion-camera" ng-click="getPhoto()"></button> -->
+              <input name="file" type="file" accept="image/*" file/>
             </label>
+            <!--- <img ng-show="form.pictureLink" ng-src="{{form.pictureLink}}" err-src="" height="250" width="250"> -->
             <button id="listYourProperty-button12" class="button button-positive button-block"
-                    ng-disabled="propertyForm.$invalid">Continue</button>
+                    ng-disabled="propertyForm.$invalid">Submit</button>
         </form>
+
     </ion-content>
 </ion-view>

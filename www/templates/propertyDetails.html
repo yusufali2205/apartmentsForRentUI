@@ -1,9 +1,9 @@
 <ion-view title="Property Details" ng-controller="propertyDetailsCtrl" ng-init="getPropertyById()">
   <ion-content overflow-scroll="true" padding="true" class="has-header">
     <div class="list card">
-      <div class="h3 padding-left">{{propertySelected.price | currency}}/month</div>
-      <div class="item item-image">
-        <img ng-src="" err-src="../images/no-image.png">
+      <div class="item item-image wrapper">
+        <img ng-src="https://s3-us-west-2.amazonaws.com/rentappimages/{{propertySelected.pictureLink}}" err-src="images/no-image.png">
+        <p class="h3 padding-left">{{propertySelected.price | currency}}/month</p>
       </div>
       <span class="h3 padding-left">{{propertySelected.propertyName}}</span>
       <div class="padding-left">{{propertySelected.address}}</div>
