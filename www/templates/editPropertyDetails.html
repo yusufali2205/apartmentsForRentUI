@@ -64,7 +64,7 @@
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Address</span>
-                <p>{{propertySelected.address}}</p>
+                <input ng-disabled="true" type="text" ng-model="propertySelected.address" required>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Area</span>
@@ -79,10 +79,10 @@
                 <input type="number" ng-model="form.price" placeholder="Monthly Rent $" required>
             </label>
             <ion-toggle toggle-class="toggle-positive" ng-model="form.furnished" name="furnished">Furnished</ion-toggle>
-            <label class="item item-input item-stacked-label" name="photo">
-                <span class="input-label">Add Photo</span>
-                <button class="button button-icon icon ion-camera" ng-click="getPhoto()">Take Photo</button>
-            </label>
+        <!--<label class="item item-input item-stacked-label" name="photo">
+                  <span class="input-label">Add Photo</span>
+                  <button class="button button-icon icon ion-camera" ng-click="getPhoto()">Take Photo</button>
+              </label> -->
             <button ng-show="editMode" id="editPropertyDetails-button12" class="button button-positive button-block"
                     ng-disabled="propertyForm.$invalid">Update</button>
         </form>

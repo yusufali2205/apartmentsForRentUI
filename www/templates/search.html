@@ -1,5 +1,5 @@
 <ion-view title="Start your search here" ng-controller="searchCtrl">
-    <ion-content overflow-scroll="true" padding="true" class="has-header">
+    <ion-content scroll="true" padding="true" class="has-header">
         <form class="list" ng-submit="getFilteredProperty()">
             <label class="item item-input" name="search">
                 <i class="icon ion-search placeholder-icon"></i>
@@ -17,8 +17,8 @@
             </label>
             <label class="item item-input" name="price">
                 <span class="input-label">Budget</span>
-                <div class="item-text-wrap">Min<input type="number" ng-model="criteria.priceMin" value="0" min="0" max="5000" name="priceMin"></div>
-                <div class="item-text-wrap">Max<input type="number" ng-model="criteria.priceMax" value="5000" min="0" max="5000" name="priceMax"></div>
+                <span class="item-text-wrap">Min<input type="number" ng-model="criteria.priceMin" value="0" min="0" max="5000" name="priceMin"></span>
+                <span class="item-text-wrap">Max<input type="number" ng-model="criteria.priceMax" value="5000" min="0" max="5000" name="priceMax"></span>
             </label>
             <label class="item item-select" name="bedrooms">
                 <span class="input-label">Bedrooms</span>
@@ -38,17 +38,24 @@
             <button id="search-button11" class="button button-positive  button-block">Search</button>
         </form>
 
+        <div ng-show="propertyList.length<1 && searchStarted" class="h2 text-center">No results found</div>
         <ion-list ng-repeat="property in propertyList">
-            <ion-item class="item-thumbnail-left">
-              <img ng-src="" err-src="../images/no-image.png">
-                <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3">{{property.propertyName}}</div></a>
-                <h2>{{property.type}}</h2>
-                <h2>{{property.price | currency}}/month</h2>
-                <p>{{property.address}}</p>
-                <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Contact Owner</a>
-                <p>Posted on: {{property.postedOn}}</p>
-            </ion-item>
+          <ion-item>
+            <div class="item item-image wrapper" ui-sref="menu.propertyDetails({propertyId: property.propertyId})">
+              <img ng-src="https://s3-us-west-2.amazonaws.com/rentappimages/{{property.pictureLink}}" err-src="images/no-image.png">
+              <p>{{property.price | currency}}/month</p>
+              <p2>{{property.type}}</p2>
+            </div>
+            <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h4 item-text-wrap">{{property.propertyName}}</div></a>
+            <a ng-hide="property.propertyName" ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3 item-text-wrap">View Property</div></a>
+            <div class="item-text-wrap">{{property.address}}</div>
+            <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Owner</a>
+            <p class="text-right">Posted on: {{property.postedOn}}</p>
+          </ion-item>
+          <div class="item-divider"></div>
         </ion-list>
+
+
         <a ng-show="links.firstPage" href="#" onclick="loadPageWithLink(links.firstPage)">First</a>
         <a ng-show="links.previousPage" href="#" onclick="loadPageWithLink(links.previousPage)">Previous</a>
         <a ng-show="links.nextPage" href="#" onclick="loadPageWithLink(links.nextPage)">Next</a>

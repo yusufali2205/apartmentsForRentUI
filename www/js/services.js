@@ -1,7 +1,7 @@
 angular.module('app.services', [])
 
 .constant("myConfig", {
-  "url": "http://10.132.7.184",
+  "url": "http://10.132.27.107",
   "port": "8080",
   "googleGeocodeURL": "https://maps.googleapis.com/maps/api/geocode/json",
   "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw",
@@ -92,6 +92,7 @@ angular.module('app.services', [])
     });
     return( request.then(
       function ( response ) {
+        
         return( response.data );
       }
       , handleError ) );
@@ -343,7 +344,8 @@ angular.module('app.services', [])
         method: "get",
         url: PROPERTY_URL + "/" + propertyId + "/reviewsList",
         params: {
-          action: "get"
+          action: "get",
+          propertyId: propertyId
         }
       });
       return( request.then( handleSuccess, handleError ) );

@@ -21,4 +21,25 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 
   });
   $http.defaults.headers.common['X-CLIENT-TOKEN'] = myConfig.apiAccessToken;
-});
+})
+
+  .run(function($ionicPlatform, $ionicPopup) {
+    $ionicPlatform.ready(function() {
+
+      // Check for network connection
+      if(window.Connection) {
+        if(navigator.connection.type == Connection.NONE) {
+          $ionicPopup.confirm({
+              title: 'No Internet Connection',
+              content: 'Sorry, no Internet connectivity detected. Please reconnect and try again.'
+            })
+            .then(function(result) {
+              if(!result) {
+                //ionic.Platform.exitApp();
+              }
+            });
+        }
+      }
+
+    });
+  })

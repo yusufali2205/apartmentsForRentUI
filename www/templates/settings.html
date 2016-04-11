@@ -22,7 +22,7 @@
         <form ng-show="editMode" class="list" name="userForm" ng-submit="onUpdate()">
             <label class="item item-input" name="email">
                 <span class="input-label">Email</span>
-                <span>{{user.email}}</span>
+                <input ng-disabled="true" type="text" ng-model="user.email" placeholder="" required>
             </label>
             <label class="item item-input" name="firstName">
                 <span class="input-label">First Name</span>

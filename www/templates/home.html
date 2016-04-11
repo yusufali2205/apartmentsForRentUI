@@ -22,25 +22,11 @@
             <p>{{property.price | currency}}/month</p>
             <p2>{{property.type}}</p2>
           </div>
-          <div class="row">
-            <div class="col">
-              <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3 item-text-wrap">{{property.propertyName}}</div></a>
-              <a ng-hide="property.propertyName" ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3 item-text-wrap">View Property</div></a>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div class="item-text-wrap">{{property.address}}</div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-10">
-              <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Owner</a>
-            </div>
-            <div class="col text-right">
-              <div>Posted on: {{property.postedOn}}</div>
-            </div>
-          </div>
+          <a ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h4 item-text-wrap">{{property.propertyName}}</div></a>
+          <a ng-hide="property.propertyName" ui-sref="menu.propertyDetails({propertyId: property.propertyId})"><div class="h3 item-text-wrap">View Property</div></a>
+          <div class="item-text-wrap">{{property.address}}</div>
+          <a ui-sref="menu.ownerDetails({ownerId: property.userId})">Owner</a>
+          <p class="text-right">Posted on: {{property.postedOn}}</p>
         </ion-item>
         <div class="item-divider"></div>
         </ion-list>

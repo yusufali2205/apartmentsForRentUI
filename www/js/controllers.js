@@ -2,6 +2,7 @@ angular.module('app.controllers', [])
 
 .controller('searchCtrl', function($scope, PropertyRepo) {
   var utc = new Date();
+  $scope.searchStarted = false;
   $scope.propertyList = [];
   $scope.links = {
     previousPage: null,
@@ -19,10 +20,12 @@ angular.module('app.controllers', [])
   };
 
   $scope.getFilteredProperty = function() {
+    //$cordovaProgress.showSimple(true);
     PropertyRepo.getPropertyFiltered($scope.criteria.priceMin, $scope.criteria.priceMax, $scope.criteria.availableFrom,
       $scope.criteria.type, $scope.criteria.bhk, $scope.criteria.propertyName, $scope.criteria.propertyName)
       .then(
         function(responseData){
+          $scope.searchStarted = true;
           console.log("-----Properties Fetched-----");
           console.log(responseData);
           $scope.propertyList = responseData._embedded.property;
@@ -30,8 +33,10 @@ angular.module('app.controllers', [])
           if(responseData._links.next) $scope.links.nextPage = responseData._links.next.href;
           if(responseData._links.first) $scope.links.firstPage = responseData._links.first.href;
           if(responseData._links.last) $scope.links.lastPage = responseData._links.last.href;
+          //$cordovaProgress.hide();
         },
         function(errorMessage){
+          //$cordovaProgress.hide();
           console.warn( "-----Error-----" );
           console.warn( errorMessage );
         }
@@ -62,7 +67,8 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('listYourPropertyCtrl', function($scope, $rootScope, $localStorage, $ionicPopup, $state, $ionicHistory, PropertyRepo, Camera) {
+.controller('listYourPropertyCtrl', function($scope, $rootScope, $localStorage, $ionicPopup, $state, $ionicHistory,
+                                             PropertyRepo, Camera) {
   if ($localStorage.getObject('user') == null) {
     $ionicHistory.nextViewOptions({
       disableBack: true
@@ -88,6 +94,25 @@ angular.module('app.controllers', [])
     postedOn: ""
   };
 
+  var resetFrom = function(){
+    $scope.form = {
+      propertyName: "",
+      type: "",
+      bhk: "",
+      geoLat: "",
+      geoLong: "",
+      address: "",
+      floorArea: "",
+      availableFrom: "",
+      price: "",
+      furnished: "",
+      userId: "",
+      pictureLink: "",
+      approved: false,
+      postedOn: ""
+    };
+  };
+
   $scope.getPhoto = function () {
     Camera.getPicture().then(function (imageURI) {
       $scope.form.pictureLink = imageURI;
@@ -99,9 +124,9 @@ angular.module('app.controllers', [])
   };
     /* for photo upload on s3*/
     $scope.creds = {
-      bucket: '',
-      access_key: '',
-      secret_key: ''
+      bucket: 'rentappimages',
+      access_key: 'AKIAIJW7AXWJVRWWHD5Q',
+      secret_key: '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'
     };
 
     var uploadPicture = function(fileName) {
@@ -117,12 +142,19 @@ angular.module('app.controllers', [])
         bucket.putObject(params, function(err, data) {
             if(err) {
               // There Was An Error With Your S3 Config
-              alert(err);
-              return false;
+              var confirmPopup = $ionicPopup.confirm({
+                title: 'Picture upload failed',
+                template: 'Picture upload failed with error: '+err + '\nDo you want to proceed without picture upload.'
+              });
+              confirmPopup.then(function(res){
+                if(!res){
+                  return false;
+                }
+              });
             }
             else {
               // Success!
-              alert('Upload Done:' +data);
+              //alert('Upload Done:' +data);
             }
           })
           .on('httpUploadProgress',function(progress) {
@@ -132,7 +164,7 @@ angular.module('app.controllers', [])
       }
       else {
         // No File Selected
-        alert('No File Selected');
+        //alert('No File Selected');
       }
     };
     /*photo upload on s3 finish*/
@@ -213,6 +245,11 @@ angular.module('app.controllers', [])
                         function (responseData) {
                           console.log("-----Property Added-----");
                           $scope.property = responseData;
+                          $ionicPopup.alert({
+                            title: 'Property added',
+                            template: "Property added successfully. This property is now visible to others."
+                          });
+                          resetFrom();
                         },
                         function (errorMessage) {
                           console.warn("-----Error while adding property-----");
@@ -260,7 +297,7 @@ angular.module('app.controllers', [])
 }
 })
 
-.controller('loginCtrl', function($scope, $location, $state, $rootScope, $ionicHistory, UserRepo, $localStorage) {
+.controller('loginCtrl', function($scope, $location, $state, $rootScope, $ionicHistory, UserRepo, $localStorage, $ionicPopup) {
   $scope.user = {
     firstName: "",
     lastName: "",
@@ -277,21 +314,29 @@ angular.module('app.controllers', [])
           $ionicHistory.nextViewOptions({
             disableBack: true
           });
-          $state.go('menu.home');
-          console.log("-----Login success-----");
-          console.log(responseData);
-          UserRepo.getUserByEmail($scope.user.email)
-            .then(
-              function(response){
-                $localStorage.setObject('user', response);
-                console.log("-----User Details Fetched-----");
-                console.log(response);
-              },
-              function(error){
-                console.warn( "-----Cannot get user details-----" );
-                console.warn( error );
-              }
-            )
+          if(responseData._links){
+            $state.go('menu.search');
+            console.log("-----Login success-----");
+            console.log(JSON.stringify(responseData));
+            UserRepo.getUserByEmail($scope.user.email)
+              .then(
+                function(response){
+                  $localStorage.setObject('user', response);
+                  console.log("-----User Details Fetched-----");
+                  console.log(response);
+                },
+                function(error){
+                  console.warn( "-----Cannot get user details-----" );
+                  console.warn( error );
+                }
+              )
+          } else {
+            $ionicPopup.alert({
+              title: 'Login failed',
+              template: 'Incorrect email or password.'
+            });
+          }
+
       },
         function(errorMessage){
           console.warn( "-----Login Error-----" );
@@ -301,7 +346,7 @@ angular.module('app.controllers', [])
   }
 })
 
-.controller('signupCtrl', function($scope, $state, $ionicHistory, UserRepo) {
+.controller('signupCtrl', function($scope, $state, $ionicHistory, UserRepo, $ionicPopup) {
   $scope.form = {
     firstName: "",
     lastName: "",
@@ -310,6 +355,18 @@ angular.module('app.controllers', [])
     city: "",
     userType: "user",
     password: ""
+  };
+
+  var resetForm = function(){
+    $scope.form = {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNo: "",
+      city: "",
+      userType: "user",
+      password: ""
+    };
   };
 
   $scope.addUser = function() {
@@ -321,7 +378,11 @@ angular.module('app.controllers', [])
       $scope.form.phoneNo, $scope.form.city, $scope.form.userType, $scope.form.password)
       .then(
         function( responseData ) {
-          /* Redirect to the home page */
+          $ionicPopup.alert({
+            title: 'Account created',
+            template: 'Please login to continue.'
+          });
+          /* Redirect to the login page */
           $ionicHistory.nextViewOptions({
             disableBack: true
           });

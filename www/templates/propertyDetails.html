@@ -8,7 +8,8 @@
       <span class="h3 padding-left">{{propertySelected.propertyName}}</span>
       <div class="padding-left">{{propertySelected.address}}</div>
       <div class="row">
-        <div class="col">Rating: {{avgRating}}/5</div>
+        <div ng-show="avgRating" class="col">Rating: {{avgRating}}/5</div>
+        <div ng-show="!avgRating" class="col">No ratings</div>
         <div class="col"> Posted: {{propertySelected.postedOn}}</div>
       </div>
 
@@ -36,22 +37,6 @@
       </div>
 
       <div class="card">
-        <div class="h4 padding-left">Owner</div>
-        <div class="row">
-          <div class="col">Name</div>
-          <div class="col">{{owner.firstName}} {{owner.lastName}}</div>
-        </div>
-        <div class="row">
-          <div class="col">Email</div>
-          <div class="col">{{owner.email}}</div>
-        </div>
-        <div class="row">
-          <div class="col">Phone</div>
-          <div class="col">{{owner.phoneNo}}</div>
-        </div>
-      </div>
-
-      <div class="card">
         <div class="h3 padding-left"><a ng-href="{{navigateURL}}">Location</a></div>
         <div class="item item-image">
           <a ng-href="{{navigateURL}}"><img ng-src="{{mapImageURL}}"></a>
@@ -60,7 +45,23 @@
     </div>
 
     <div class="card">
-      <div ng-show="userLogged && myReview.length>0" class="card">
+      <div class="h4 padding-left">Owner</div>
+      <div class="row">
+        <div class="col">Name</div>
+        <div class="col">{{owner.firstName}} {{owner.lastName}}</div>
+      </div>
+      <div class="row">
+        <div class="col">Email</div>
+        <div class="col">{{owner.email}}</div>
+      </div>
+      <div class="row">
+        <div class="col">Phone</div>
+        <div class="col">{{owner.phoneNo}}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div ng-show="userLogged && myReview.length>0" class="">
         <div class="h3 padding-left">Your feedback</div>
         <div class="padding-left">Rating: {{myReview[0].rating}}</div>
         <div class="padding-left">{{myReview[0].review}}</div>
@@ -86,18 +87,20 @@
           <button id="listYourProperty-button12" class="button button-positive  button-block">Submit</button>
         </form>
       </div>
-
-      <div class="">
-        <div class=" h3 padding-left">Reviews</div>
-        <ion-list ng-repeat="review in reviews">
-          <ion-item>
-              <h2>Anonymous user {{review.userId}}</h2>
-              <h3>Rated {{review.rating}}/5</h3>
-              <div class="item-text-wrap">{{review.review}}</div>
-            </ion-item>
-        </ion-list>
-      </div>
-
     </div>
+
+
+    <div class="card">
+      <div ng-show="reviews.length>0" class=" h3 padding-left">Reviews</div>
+      <div ng-show="!reviews.length>0" class=" h3 padding-left">No Reviews</div>
+      <ion-list ng-repeat="review in reviews">
+        <ion-item>
+          <h2>Anonymous user {{review.userId}}</h2>
+          <h3>Rated {{review.rating}}/5</h3>
+          <div class="item-text-wrap">{{review.review}}</div>
+        </ion-item>
+      </ion-list>
+    </div>
+
   </ion-content>
 </ion-view>

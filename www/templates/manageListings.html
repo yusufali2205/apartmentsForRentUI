@@ -4,15 +4,15 @@
                 pulling-text="Pull to refresh..."
                 on-refresh="getMyProperties()">
         </ion-refresher>
-        <ion-list ng-repeat="property in propertyList">
-            <ion-item class="item-thumbnail-left">
-                <img ng-src="" err-src="../images/no-image.png">
-                <a ui-sref="menu.editPropertyDetails({propertyId: property.propertyId})"><div class="h3">{{property.propertyName}}</div></a>
+      <h3 class="text-center">Select a property to edit</h3>
+      <ion-list ng-repeat="property in propertyList">
+            <ion-item class="">
+              <a ui-sref="menu.editPropertyDetails({propertyId: property.propertyId})"><div class="h3">{{property.propertyName}}</div></a>
               <a ui-sref="menu.editPropertyDetails({propertyId: property.propertyId})"><div ng-if="!property.propertyName">View property</div></a>
-              <h2>{{property.type}}</h2>
-                <h2>{{property.price | currency}}/month</h2>
-                <p>{{property.address}}</p>
-                <p>Posted on: {{property.postedOn}}</p>
+              <p>{{property.type}}</p>
+                <p>{{property.price | currency}}/month</p>
+                <div class="item-text-wrap">{{property.address}}</div>
+                <p class="text-right">Posted on: {{property.postedOn}}</p>
             </ion-item>
             <ion-item class="item-divider"></ion-item>
         </ion-list>
