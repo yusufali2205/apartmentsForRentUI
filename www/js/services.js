@@ -1,8 +1,8 @@
 angular.module('app.services', [])
 
 .constant("myConfig", {
-  "url": "http://10.132.27.107",
-  "port": "8080",
+  "url": "http://cislinux.cis.ksu.edu",
+  "port": "8737",
   "googleGeocodeURL": "https://maps.googleapis.com/maps/api/geocode/json",
   "googleApiKey" : "AIzaSyCrRt9NkoY61h3B-0vRXmXNwmLExMdwjBw",
   "apiAccessToken": "aUo3TpibnR"
@@ -45,7 +45,7 @@ angular.module('app.services', [])
   }
 }])
 
-.service('UserRepo', ['myConfig', '$http', '$q', function(myConfig, $http, $q, $localStorage){
+.service('UserRepo', ['myConfig', '$http', '$q', '$ionicPopup', '$ionicLoading', function(myConfig, $http, $q, $ionicPopup, $ionicLoading){
   var USER_URL = myConfig.url + ":" + myConfig.port + "/users";
   var LOGIN_URL = myConfig.url + ":" + myConfig.port + "/login";
   var LOGOUT_URL = myConfig.url + ":" + myConfig.port + "/logout";
@@ -61,6 +61,9 @@ angular.module('app.services', [])
   });
 
   function addUser(firstName, lastName, email, phone, city, type, password) {
+    $ionicLoading.show({
+      template: '<ion-spinner>'
+    });
     var request = $http({
       method: "post",
       url: USER_URL,
@@ -81,6 +84,9 @@ angular.module('app.services', [])
   }
 
   function login(email, password) {
+    $ionicLoading.show({
+      template: '<ion-spinner>'
+    });
     var request = $http({
       method: "post",
       url: LOGIN_URL,
@@ -92,13 +98,16 @@ angular.module('app.services', [])
     });
     return( request.then(
       function ( response ) {
-        
+        $ionicLoading.hide();
         return( response.data );
       }
       , handleError ) );
   }
 
   function updateUser(userId, email, firstName, lastName, phoneNo, city, password){
+    $ionicLoading.show({
+      template: '<ion-spinner>'
+    });
     var request = $http({
       method: "put",
       url: USER_URL + "/" + userId,
@@ -119,6 +128,9 @@ angular.module('app.services', [])
   }
 
   function logout() {
+    $ionicLoading.show({
+      template: '<ion-spinner>'
+    });
     var request = $http({
       method: "post",
       url: LOGOUT_URL,
@@ -128,12 +140,16 @@ angular.module('app.services', [])
     });
     return( request.then(
       function ( response ) {
+        $ionicLoading.hide();
         return( response.data );
       }
       , handleError ) );
   }
 
   function removeUser( email ) {
+    $ionicLoading.show({
+      template: '<ion-spinner>'
+    });
     var request = $http({
       method: "delete",
       url: USER_URL,
@@ -146,12 +162,16 @@ angular.module('app.services', [])
     });
     return( request.then(
       function ( response ) {
+        $ionicLoading.hide();
         return( response.data );
       }
       , handleError ) );
   }
 
   function getUserById( userId ) {
+    $ionicLoading.show({
+      template: '<ion-spinner>'
+    });
     var request = $http({
       method: "get",
       url: USER_URL + "/" + userId
@@ -160,6 +180,9 @@ angular.module('app.services', [])
   }
 
   function getUserByEmail( email ) {
+    $ionicLoading.show({
+      template: '<ion-spinner>'
+    });
     var request = $http({
       method: "get",
       url: USER_URL + "/search/findByEmail/",
@@ -179,19 +202,30 @@ angular.module('app.services', [])
       ! angular.isObject( response.data ) ||
       ! response.data.message
     ) {
+      $ionicLoading.hide();
+      $ionicPopup.alert({
+        title: 'Server error',
+        template: 'Server unreachable'
+      });
       return( $q.reject( "An unknown error occurred." ) );
     }
     // Otherwise, use expected error message.
+    $ionicLoading.hide();
+    $ionicPopup.alert({
+      title: 'Server error',
+      template: response.data.message
+    });
     return( $q.reject( response.data.message ) );
   }
   // I transform the successful response, unwrapping the application data
   // from the API response payload.
   function handleSuccess( response ) {
+    $ionicLoading.hide();
     return( response.data );
   }
 }])
 
-  .service('PropertyRepo', ['myConfig', '$http', '$q', function(myConfig, $http, $q){
+  .service('PropertyRepo', ['myConfig', '$http', '$q', '$ionicPopup', '$ionicLoading', function(myConfig, $http, $q, $ionicPopup, $ionicLoading){
     var PROPERTY_URL = myConfig.url + ":" + myConfig.port + "/property";
     var REVIEW_URL = myConfig.url + ":" + myConfig.port + "/review";
     var ADDRESS_VERIFY_URL = myConfig.googleGeocodeURL;
@@ -218,6 +252,9 @@ angular.module('app.services', [])
     function addProperty(propertyName, propertyType, bhk, geoLat, geoLong , address,
                          floorArea, availableFrom, propertyPrice, furnished,
                          userId, pictureLink, placeId) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       console.log("Service:"+ pictureLink);
       var utc = new Date().toJSON().slice(0,10);
       var request = $http({
@@ -250,6 +287,9 @@ angular.module('app.services', [])
     function editPropertyDetails(propertyId, propertyName, propertyType, bhk, geoLat, geoLong , address,
                          floorArea, availableFrom, propertyPrice, furnished,
                          userId, pictureLink, placeId) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       console.log("Service: "+placeId + " " + geoLat + " " + geoLong);
       var utc = new Date().toJSON().slice(0,10);
       var request = $http({
@@ -280,6 +320,9 @@ angular.module('app.services', [])
     }
 
     function getAllProperty() {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: PROPERTY_URL
@@ -288,6 +331,9 @@ angular.module('app.services', [])
     }
 
     function deleteProperty(propertyId) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "delete",
         url: PROPERTY_URL + "/" + propertyId
@@ -296,6 +342,9 @@ angular.module('app.services', [])
     }
 
     function getPropertyFiltered(priceMin, priceMax, availableFrom, type, bhk, propertyName, address){
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: PROPERTY_URL + "/search/findByPriceBetweenAndAvailableFromGreaterThanEqualAndTypeAndBhkAndPropertyNameIgnoreCaseOrAddressIgnoreCase",
@@ -314,6 +363,9 @@ angular.module('app.services', [])
     }
 
     function removeProperty( propertyId ) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "delete",
         url: PROPERTY_URL,
@@ -328,6 +380,9 @@ angular.module('app.services', [])
     }
 
     function getAverageRating( propertyId ) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: REVIEW_URL + "/search/getAverageRating",
@@ -340,6 +395,9 @@ angular.module('app.services', [])
     }
 
     function getAllReviewsByPropertyId( propertyId ) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: PROPERTY_URL + "/" + propertyId + "/reviewsList",
@@ -352,6 +410,9 @@ angular.module('app.services', [])
     }
 
     function getPropertyById( propertyId ) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: PROPERTY_URL + "/" + propertyId,
@@ -363,6 +424,9 @@ angular.module('app.services', [])
     }
 
     function listMyProperties( userId ) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: PROPERTY_URL + "/search/findByUserId",
@@ -375,6 +439,9 @@ angular.module('app.services', [])
     }
 
     function getOwnerByLink( propertyLink ) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: propertyLink + "/postedByUser",
@@ -386,6 +453,9 @@ angular.module('app.services', [])
     }
 
     function checkPropertyByPlaceId( placeId ) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: PROPERTY_URL + "/search/checkPropertyByPlaceId/",
@@ -399,6 +469,9 @@ angular.module('app.services', [])
 
     function addReview(userId, propertyId, rating, review) {
       //var utc = new Date().toJSON().slice(0,10);
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "post",
         url: REVIEW_URL,
@@ -416,6 +489,9 @@ angular.module('app.services', [])
     }
 
     function verifyAddress(address) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: ADDRESS_VERIFY_URL,
@@ -428,6 +504,9 @@ angular.module('app.services', [])
     }
 
     function getPropertyPageByLink(link) {
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: link
@@ -436,6 +515,9 @@ angular.module('app.services', [])
     }
 
     function getReviewByUserAndProperty(userId, propertyId){
+      $ionicLoading.show({
+        template: '<ion-spinner>'
+      });
       var request = $http({
         method: "get",
         url: PROPERTY_URL + "/search/getReviewsByPropertyIdAndUserId",
@@ -456,14 +538,42 @@ angular.module('app.services', [])
         ! angular.isObject( response.data ) ||
         ! response.data.message
       ) {
+        $ionicLoading.hide();
+        $ionicPopup.alert({
+          title: 'Server error',
+          template: 'Server unreachable'
+        });
         return( $q.reject( "An unknown error occurred." ) );
       }
+      // Otherwise, use expected error message.
+      $ionicLoading.hide();
+      $ionicPopup.alert({
+        title: 'Server error',
+        template: response.data.message
+      });
+      return( $q.reject( response.data.message ) );
+    }
+
+    function handleErrorMapApi( response ) {
+      // The API response from the server should be returned in a
+      // nomralized format. However, if the request was not handled by the
+      // server (or what not handles properly - ex. server error), then we
+      // may have to normalize it on our end, as best we can.
+      if (
+        ! angular.isObject( response.data ) ||
+        ! response.data.message
+      ) {
+        $ionicLoading.hide();
+        return( $q.reject( "An unknown error occurred." ) );
+      }
+      $ionicLoading.hide();
       // Otherwise, use expected error message.
       return( $q.reject( response.data.message ) );
     }
     // I transform the successful response, unwrapping the application data
     // from the API response payload.
     function handleSuccess( response ) {
+      $ionicLoading.hide();
       return( response.data );
     }
   }]);

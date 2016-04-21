@@ -184,12 +184,16 @@ angular.module('app.controllers', [])
               });
             }
           } else if (response.status = "ZERO_RESULTS") {
-            console.log("-----Invalid Address-----");
-            $ionicPopup.alert({
-              title: 'Address not found',
-              template: 'Please enter a valid address\nTo avoid spam listings we verify if this address exists ' +
-              'and our system could not find this address.'
-            });
+            if($scope.form.address == ""){
+
+            } else {
+              console.log("-----Invalid Address-----");
+              $ionicPopup.alert({
+                title: 'Address not found',
+                template: 'Please enter a valid address.\nTo avoid spam listings we verify if the address exists ' +
+                'and our system could not find this address.'
+              });
+            }
           } else {
             console.log("-----Trouble validating address-----");
             console.log(response);
@@ -230,7 +234,7 @@ angular.module('app.controllers', [])
                     var place_id = verifierResponse.results[0].place_id;
                     var geo_lat = verifierResponse.results[0].geometry.location.lat;
                     var geo_lng = verifierResponse.results[0].geometry.location.lng;
-                    if($scope.file.name){
+                    if($scope.file){
                       $scope.form.pictureLink = "propertyImages/" + $scope.file.name.split('.')[0] +
                         new Date().getTime() + '.' + $scope.file.name.split('.')[1];
                       uploadPicture($scope.form.pictureLink);
@@ -669,7 +673,7 @@ angular.module('app.controllers', [])
     }
   })
 
-  .controller('propertyDetailsCtrl', function($scope, $stateParams, $rootScope, $localStorage, PropertyRepo, UserRepo) {
+  .controller('propertyDetailsCtrl', function($scope, $stateParams, $rootScope, $localStorage, PropertyRepo, UserRepo, $ionicPopup) {
     var propertyId = $stateParams.propertyId;
     $scope.userLogged = $localStorage.getObject('user');
     console.log(propertyId);
@@ -686,7 +690,7 @@ angular.module('app.controllers', [])
     $scope.reviewForm ={
       userId: "",
       propertyId: "",
-      rating: "",
+      rating: null,
       review: ""
     };
 
@@ -705,6 +709,7 @@ angular.module('app.controllers', [])
             $scope.getOwnerDetails();
             $scope.getAllReviewsByPropertyId();
             $scope.getMyReviews();
+            //$scope.showMap();
           },
           function(errorMessage){
             console.warn( "-----Error-----" );
@@ -765,20 +770,27 @@ angular.module('app.controllers', [])
     };
 
     $scope.addReview = function() {
-      PropertyRepo.addReview($localStorage.getObject('user').userId, $scope.propertyId, $scope.reviewForm.rating, $scope.reviewForm.review)
-        .then(
-          function(responseData){
-            console.log("-----Review Posted-----");
-            console.log(responseData);
-            $scope.reviews.push(responseData);
-            $scope.myReview.push(responseData);
-            $scope.getAverageRating();
-          },
-          function(errorMessage) {
-            console.warn("-----Error-----");
-            console.warn(errorMessage);
-          }
-        )
+      if($scope.reviewForm.rating<0 || $scope.reviewForm.rating==null){
+        $ionicPopup.alert({
+          title: 'Please provide a rating',
+          template: 'You cannot add a review unless you select a rating between 1 to 5.'
+        });
+      } else {
+        PropertyRepo.addReview($localStorage.getObject('user').userId, $scope.propertyId, $scope.reviewForm.rating, $scope.reviewForm.review)
+          .then(
+            function(responseData){
+              console.log("-----Review Posted-----");
+              console.log(responseData);
+              $scope.reviews.push(responseData);
+              $scope.myReview.push(responseData);
+              $scope.getAverageRating();
+            },
+            function(errorMessage) {
+              console.warn("-----Error-----");
+              console.warn(errorMessage);
+            }
+          )
+      }
     };
 
     $scope.getMyReviews = function(){
@@ -796,8 +808,29 @@ angular.module('app.controllers', [])
             }
           )
       }
-    }
+    };
 
+    /*
+    $scope.showMap = function(){
+      var pins = [];
+      var mapOptions = {
+        center: new google.maps.LatLng($scope.propertySelected.geoLat, $scope.propertySelected.geoLong),
+        zoom: 17
+      };
+
+      //create map
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+      //show pins on map
+      var pin_title = "Place";
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng($scope.propertySelected.geoLat, $scope.propertySelected.geoLong),
+        map: map,
+        title: pin_title
+      });
+      pins.push(marker);
+    }
+    */
   })
 
 .controller('homeCtrl', function($scope, PropertyRepo) {

@@ -4,7 +4,8 @@
                 pulling-text="Pull to refresh..."
                 on-refresh="getMyProperties()">
         </ion-refresher>
-      <h3 class="text-center">Select a property to edit</h3>
+      <h3 ng-show="propertyList.length>0" class="text-center">Select a property to edit</h3>
+      <h3 ng-show="propertyList.length<1" class="text-center">No listings by you</h3>
       <ion-list ng-repeat="property in propertyList">
             <ion-item class="">
               <a ui-sref="menu.editPropertyDetails({propertyId: property.propertyId})"><div class="h3">{{property.propertyName}}</div></a>

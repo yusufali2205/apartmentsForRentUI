@@ -34,7 +34,7 @@
             </label>
             <label class="item item-input">
                 <span class="input-label">Mobile</span>
-                <input type="tel" ng-model="user.phoneNo" placeholder="" required>
+                <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" ng-model="user.phoneNo" placeholder="" required>
             </label>
             <label class="item item-input" name="city">
                 <span class="input-label">City</span>

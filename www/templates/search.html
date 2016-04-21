@@ -17,8 +17,8 @@
             </label>
             <label class="item item-input" name="price">
                 <span class="input-label">Budget</span>
-                <span class="item-text-wrap">Min<input type="number" ng-model="criteria.priceMin" value="0" min="0" max="5000" name="priceMin"></span>
-                <span class="item-text-wrap">Max<input type="number" ng-model="criteria.priceMax" value="5000" min="0" max="5000" name="priceMax"></span>
+                <span class="item-text-wrap">Min<input type="number" inputmode="numeric" pattern="[0-9]*" ng-model="criteria.priceMin" value="0" min="0" max="5000" name="priceMin"></span>
+                <span class="item-text-wrap">Max<input type="number" inputmode="numeric" pattern="[0-9]*" ng-model="criteria.priceMax" value="5000" min="0" max="5000" name="priceMax"></span>
             </label>
             <label class="item item-select" name="bedrooms">
                 <span class="input-label">Bedrooms</span>

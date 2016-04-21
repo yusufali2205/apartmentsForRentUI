@@ -20,7 +20,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     }
 
   });
-  $http.defaults.headers.common['X-CLIENT-TOKEN'] = myConfig.apiAccessToken;
+    $http.defaults.headers.common['X-CLIENT-TOKEN'] = myConfig.apiAccessToken;
 })
 
   .run(function($ionicPlatform, $ionicPopup) {
@@ -42,4 +42,4 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
       }
 
     });
-  })
+  });

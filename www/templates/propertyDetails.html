@@ -1,6 +1,6 @@
 <ion-view title="Property Details" ng-controller="propertyDetailsCtrl" ng-init="getPropertyById()">
   <ion-content overflow-scroll="true" padding="true" class="has-header">
-    <div class="list card">
+    <div class="card">
       <div class="item item-image wrapper">
         <img ng-src="https://s3-us-west-2.amazonaws.com/rentappimages/{{propertySelected.pictureLink}}" err-src="images/no-image.png">
         <p class="h3 padding-left">{{propertySelected.price | currency}}/month</p>
@@ -36,12 +36,13 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="">
         <div class="h3 padding-left"><a ng-href="{{navigateURL}}">Location</a></div>
         <div class="item item-image">
           <a ng-href="{{navigateURL}}"><img ng-src="{{mapImageURL}}"></a>
         </div>
       </div>
+      <!--<div id="map" style="width: 400px; height: 400px" data-tap-disabled="true"></div>-->
     </div>
 
     <div class="card">
@@ -70,7 +71,7 @@
       <div ng-show="userLogged && myReview.length<1" class="">
         <div class="h3 padding-left">Give your feedback</div>
         <form class="list" ng-submit="addReview()">
-          <label class="item item-select" name="giveRating">
+          <label class="item item-select">
             <span class="input-label">Rating</span>
             <select ng-model="reviewForm.rating" required>
               <option value="1">1</option>
@@ -95,12 +96,11 @@
       <div ng-show="!reviews.length>0" class=" h3 padding-left">No Reviews</div>
       <ion-list ng-repeat="review in reviews">
         <ion-item>
-          <h2>Anonymous user {{review.userId}}</h2>
+          <h2>User {{review.userId}}</h2>
           <h3>Rated {{review.rating}}/5</h3>
           <div class="item-text-wrap">{{review.review}}</div>
         </ion-item>
       </ion-list>
     </div>
-
   </ion-content>
 </ion-view>
