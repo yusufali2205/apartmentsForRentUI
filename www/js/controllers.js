@@ -125,8 +125,8 @@ angular.module('app.controllers', [])
     /* for photo upload on s3*/
     $scope.creds = {
       bucket: 'rentappimages',
-      access_key: 'AKIAIJW7AXWJVRWWHD5Q',
-      secret_key: '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'
+      access_key: 'access-key-here',
+      secret_key: 'secret-key-here'
     };
 
     var uploadPicture = function(fileName) {
